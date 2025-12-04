@@ -21,25 +21,23 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/profile")
-
     public ResponseEntity<UserDto> getUserProfile(
-        @RequestHeader("Authorization") String jwt
-
-    )throws Exception{
-        User user=userService.getUserFromJwtToken(jwt);
-        return ResponseEntity.ok(UserMapper.toDto(user));   
+            @RequestHeader("Authorization") String jwt) throws Exception {
+        User user = userService.getUserFromJwtToken(jwt);
+        if (user == null) {
+            return ResponseEntity.status(404).body(null); // Return 404 if user not found
+        }
+        return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
     @GetMapping("{id}")
-
     public ResponseEntity<UserDto> getUserById(
-        @RequestHeader("Authorization") String jwt,
-        @PathVariable Long id
-
-    )throws Exception{
-        User user=userService.getUserById(id);
-        return ResponseEntity.ok(UserMapper.toDto(user));   
+            @RequestHeader("Authorization") String jwt,
+            @PathVariable Long id) {
+        User user = userService.getUserById(id);
+        if (user == null)
+            throw new UserNotFoundException(id);
+        return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
-    
 }

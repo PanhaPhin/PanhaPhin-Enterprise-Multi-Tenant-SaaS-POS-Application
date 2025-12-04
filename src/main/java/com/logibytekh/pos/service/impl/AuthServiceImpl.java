@@ -33,42 +33,35 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse signup(UserDto userDto) throws Exception {
-        User user = userRepository.findByEmail(userDto.getEmail());
-        if (user != null) {
+        if (userRepository.findByEmail(userDto.getEmail()) != null) {
             throw new Exception("Email id already registered");
-
         }
         if (userDto.getRole().equals(UserRole.ROLE_ADMIN)) {
-            throw new Exception("role admin is not allowed !");
+            throw new Exception("Role admin is not allowed!");
         }
 
         User newUser = new User();
         newUser.setEmail(userDto.getEmail());
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setRole(userDto.getRole());
-        newUser.setFullName(userDto.getFullName()); // ✅ use fullName, not phone
-        newUser.setPhone(userDto.getPhone()); // ✅ set phone separately
+        newUser.setFullName(userDto.getFullName());
+        newUser.setPhone(userDto.getPhone());
         newUser.setLastLogin(LocalDateTime.now());
         newUser.setCreatedAt(LocalDateTime.now());
-        newUser.setUpdatedAt(LocalDateTime.now()); // ✅ updatedAt instead of calling createdAt twice
-
-        userRepository.save(newUser);
+        newUser.setUpdatedAt(LocalDateTime.now());
 
         User savedUser = userRepository.save(newUser);
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDto.getEmail(),
-                userDto.getPassword());
-
+        Authentication authentication = authenticate(userDto.getEmail(), userDto.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String jwt = jwtProvider.generateToken(authentication);
 
         AuthResponse authResponse = new AuthResponse();
         authResponse.setJwt(jwt);
-        authResponse.setMessages("Registerd Successfully ");
+        authResponse.setMessages("Registered Successfully");
         authResponse.setUser(UserMapper.toDto(savedUser));
 
-        return null;
+        return authResponse;
     }
 
     @SuppressWarnings("unused")
@@ -97,19 +90,19 @@ public class AuthServiceImpl implements AuthService {
         authResponse.setMessages("Login Successfully ");
         authResponse.setUser(UserMapper.toDto(user));
 
-        return null;
+        return authResponse;
     }
 
     private Authentication authenticate(String email, String password) throws Exception {
+
         UserDetails userDetails = customUserImplement.loadUserByUsername(email);
 
         if (userDetails == null) {
-            throw new Exception("email id doesn't exist " + email);
+            throw new Exception("Email not found: " + email);
         }
 
-        // 🔥 Correct password check
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new Exception("password doesn't match");
+            throw new Exception("Incorrect password");
         }
 
         return new UsernamePasswordAuthenticationToken(

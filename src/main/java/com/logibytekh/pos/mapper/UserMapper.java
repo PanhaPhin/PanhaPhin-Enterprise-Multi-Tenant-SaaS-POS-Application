@@ -4,7 +4,8 @@ import com.logibytekh.pos.payload.dto.UserDto;
 
 public class UserMapper {
 
-    public static UserDto toDto(User savedUser){
+    public static UserDto toDto(User savedUser) {
+           if (savedUser == null) return null;
         UserDto userDto = new UserDto();
         
         userDto.setId(savedUser.getId());
