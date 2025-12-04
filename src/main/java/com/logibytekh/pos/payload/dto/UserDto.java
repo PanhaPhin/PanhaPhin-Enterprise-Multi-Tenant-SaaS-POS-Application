@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
-@Data
+static @Data
 public class UserDto {
 
     private Long id;
