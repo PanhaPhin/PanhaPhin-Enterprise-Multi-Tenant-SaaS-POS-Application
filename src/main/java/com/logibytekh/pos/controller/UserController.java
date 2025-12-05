@@ -15,7 +15,7 @@ import com.logibytekh.pos.service.UserService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -25,19 +25,17 @@ public class UserController {
             @RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.getUserFromJwtToken(jwt);
         if (user == null) {
-            return ResponseEntity.status(404).body(null); // Return 404 if user not found
+            return ResponseEntity.status(404).body(null);
         }
         return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(
             @RequestHeader("Authorization") String jwt,
-            @PathVariable Long id) {
+            @PathVariable Long id) throws Exception {
         User user = userService.getUserById(id);
-        if (user == null)
-            throw new UserNotFoundException(id);
+        
         return ResponseEntity.ok(UserMapper.toDto(user));
     }
-
 }

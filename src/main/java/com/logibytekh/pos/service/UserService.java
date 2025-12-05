@@ -9,7 +9,7 @@ public interface UserService {
     User getUserFromJwtToken(String token) throws Exception;
     User getCurrentUser() throws Exception;
     User getUserByEmail(String email) throws Exception;
-    User getUserById(Long id);
+    User getUserById(Long id) throws Exception;
     List<User> getAllUsers();
 
 
