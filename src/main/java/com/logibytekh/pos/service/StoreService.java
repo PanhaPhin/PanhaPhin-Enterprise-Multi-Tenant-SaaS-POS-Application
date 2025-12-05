@@ -11,7 +11,7 @@ public interface StoreService {
     
 
 
-   StoreDTO createStore(StoreDTO storeDTO, org.apache.catalina.User user);
+    StoreDTO createStore(StoreDTO storeDTO, User user);
 
     StoreDTO getStoreById(Long id) throws Exception;
 

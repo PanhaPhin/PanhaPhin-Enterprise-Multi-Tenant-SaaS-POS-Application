@@ -1,16 +1,15 @@
 package com.logibytekh.pos.service.impl;
 
 import java.util.List;
-import java.util.stream.Collector;
+
 import java.util.stream.Collectors;
 
-import org.checkerframework.checker.units.qual.radians;
+
 import org.springframework.stereotype.Service;
 
 import com.logibytekh.pos.mapper.StoreMapper;
 import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.StoreContact;
-import com.logibytekh.pos.modal.StoreContact.StoreContactBuilder;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.StoreDTO;
 import com.logibytekh.pos.repository.StoreRepository;
@@ -28,7 +27,7 @@ public class StoreServiceImpl implements StoreService{
     private final UserService userService;
 
 
-      @Override
+    @Override
     public StoreDTO createStore(StoreDTO storeDTO, User user) {
         Store store = StoreMapper.toEntity(storeDTO, user);
         return StoreMapper.tDto(storeRepository.save(store));
@@ -95,7 +94,7 @@ public StoreDTO updateStore(Long id, StoreDTO storeDTO) throws Exception {
     @Override
     public void deleteStore(Long id) throws Exception {
         Store store= getStoreByAdmin();
-       storeRepository.delete(store);
+       storeRepository.delete(store);;
     }
 
     @Override
@@ -108,6 +107,10 @@ public StoreDTO updateStore(Long id, StoreDTO storeDTO) throws Exception {
 
        return StoreMapper.tDto(currentUser.getStore());
     }
+
+    
+
+
     
 }
 

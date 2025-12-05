@@ -2,8 +2,6 @@ package com.logibytekh.pos.modal;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.ManyToAny;
-
 import com.logibytekh.pos.domain.UserRole;
 
 import jakarta.persistence.Column;
@@ -12,12 +10,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.validation.constraints.Email;
 
 @Entity
 @Getter
@@ -25,7 +23,7 @@ import jakarta.validation.constraints.Email;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class User implements org.apache.catalina.User {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,13 +47,9 @@ public class User implements org.apache.catalina.User {
     @Column(nullable = false)
     private UserRole role;
 
-   
     private LocalDateTime createdAt;
 
-    
     private LocalDateTime updatedAt;
 
-    
     private LocalDateTime lastLogin;
-
 }
