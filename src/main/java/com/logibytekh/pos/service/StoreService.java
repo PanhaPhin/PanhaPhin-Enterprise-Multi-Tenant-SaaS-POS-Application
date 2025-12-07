@@ -2,6 +2,7 @@ package com.logibytekh.pos.service;
 
 import java.util.List;
 
+import com.logibytekh.pos.domain.StoreStatus;
 import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.StoreDTO;
@@ -24,6 +25,10 @@ public interface StoreService {
     void deleteStore(Long id) throws Exception;
 
     StoreDTO getStoreByEmployee() throws Exception;
+    
+    StoreDTO moderateStore(Long id, String status) throws Exception;
+
+    StoreDTO moderateStore(Long id, StoreStatus status) throws Exception;
 
     
 

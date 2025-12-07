@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.logibytekh.pos.domain.StoreStatus;
 import com.logibytekh.pos.mapper.StoreMapper;
 import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.StoreContact;
@@ -106,6 +107,28 @@ public StoreDTO updateStore(Long id, StoreDTO storeDTO) throws Exception {
         }
 
        return StoreMapper.tDto(currentUser.getStore());
+    }
+
+    @Override
+    public StoreDTO moderateStore(Long id, StoreStatus status)  throws Exception{
+        Store store = storeRepository.findById(id).orElseThrow(
+            ()-> new Exception("Store not found")
+        );
+
+        store.setStatus(status);
+        Store updatedStore=storeRepository.save(store);
+        return StoreMapper.tDto(updatedStore);
+
+
+
+        
+      
+    }
+
+    @Override
+    public StoreDTO moderateStore(Long id, String status) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'moderateStore'");
     }
 
     
