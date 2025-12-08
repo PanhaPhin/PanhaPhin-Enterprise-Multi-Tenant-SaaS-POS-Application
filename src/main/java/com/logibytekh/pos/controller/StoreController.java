@@ -2,7 +2,7 @@ package com.logibytekh.pos.controller;
 
 import com.logibytekh.pos.domain.StoreStatus;
 import com.logibytekh.pos.mapper.StoreMapper;
-import com.logibytekh.pos.modal.Store;
+
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.StoreDTO;
 import com.logibytekh.pos.payload.response.ApiResponse;
@@ -13,26 +13,31 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import org.apache.catalina.StoreManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/store")
+@RequestMapping("/api/stores")
 public class StoreController {
 
     private final StoreService storeService;
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<StoreDTO> createStore(
-            @RequestBody StoreDTO storeDTO,
-            @RequestHeader("Authorization") String jwt) throws Exception {
+public ResponseEntity<StoreDTO> createStore(
+        @RequestBody StoreDTO storeDTO,
+        @RequestHeader("Authorization") String jwt) throws Exception {
 
-        User user = userService.getUserFromJwtToken(jwt);
-        return ResponseEntity.ok(storeService.createStore(storeDTO, user));
+    User user = userService.getUserFromJwtToken(jwt);
+
+    if (user == null) {
+        throw new RuntimeException("Invalid JWT or user not found");
     }
+
+    return ResponseEntity.ok(storeService.createStore(storeDTO, user));
+}
+
 
     @GetMapping("/{id}")
     public ResponseEntity<StoreDTO> getStoreById(

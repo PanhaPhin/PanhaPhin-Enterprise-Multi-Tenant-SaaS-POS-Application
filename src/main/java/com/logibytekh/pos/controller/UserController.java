@@ -18,14 +18,16 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
 
     @GetMapping("/profile")
     public ResponseEntity<UserDto> getUserProfile(
             @RequestHeader("Authorization") String jwt) throws Exception {
+
         User user = userService.getUserFromJwtToken(jwt);
         if (user == null) {
-            return ResponseEntity.status(404).body(null);
+            return ResponseEntity.status(401).build(); // token invalid
         }
         return ResponseEntity.ok(UserMapper.toDto(user));
     }
@@ -34,8 +36,9 @@ public class UserController {
     public ResponseEntity<UserDto> getUserById(
             @RequestHeader("Authorization") String jwt,
             @PathVariable Long id) throws Exception {
+
         User user = userService.getUserById(id);
-        
         return ResponseEntity.ok(UserMapper.toDto(user));
     }
 }
+

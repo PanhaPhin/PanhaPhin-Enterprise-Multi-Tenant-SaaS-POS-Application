@@ -8,6 +8,7 @@ import com.logibytekh.pos.domain.UserRole;
 import lombok.Data;
 
 @Data
+
 public class UserDto {
 
     private Long id;
