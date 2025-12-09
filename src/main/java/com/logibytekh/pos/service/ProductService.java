@@ -10,7 +10,7 @@ public interface ProductService {
     ProductDTO createProduct(ProductDTO productDTO, User user) throws Exception;
     ProductDTO upadateProduct(Long id,ProductDTO productDTO, User user);
 
-    void deleteProduct(Long id , User user);
+    void deleteProduct(Long id , User user) throws Exception;
     List<ProductDTO> getProducts(User user);
     List<ProductDTO> searchByKeyword(Long storeId, String keyword);
 

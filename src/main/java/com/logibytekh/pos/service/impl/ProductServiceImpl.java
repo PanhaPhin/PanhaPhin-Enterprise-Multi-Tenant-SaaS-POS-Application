@@ -1,5 +1,6 @@
 package com.logibytekh.pos.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -41,13 +42,35 @@ public  class ProductServiceImpl implements ProductService{
     }
     
 
-    @Override
-    public ProductDTO upadateProduct(Long id, ProductDTO productDTO, User user) {
-      return null;
-    }
+   @Override
+public ProductDTO upadateProduct(Long id, ProductDTO productDTO, User user) {
+
+    Product product = productRespository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Product not found")
+        
+        );
+
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setSku(productDTO.getSku());
+        product.setImage(product.getImage());
+        product.setSellingPrice(product.getSellingPrice());
+        product.setBrand(product.getBrand());
+        product.setUpdatedAt(LocalDateTime.now());
+
+        Product saveProduct=productRespository.save(product);
+        return ProductMapper.toDto(saveProduct);
+
+}
+
 
     @Override
-    public void deleteProduct(Long id, User user) {
+    public void deleteProduct(Long id, User user) throws Exception{
+
+        Product product = productRespository.findById(id).orElseThrow(
+            ()-> new Exception("product not found")
+        );
+        productRespository.delete(product);
       
     }
 
@@ -60,15 +83,6 @@ public  class ProductServiceImpl implements ProductService{
     public List<ProductDTO> searchByKeyword(Long storeId, String keyword) {
        return null;
     }
-
-
-
-
-
-
-
-
-    
 
    
     
