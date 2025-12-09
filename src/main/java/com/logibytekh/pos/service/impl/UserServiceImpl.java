@@ -20,16 +20,33 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
 
-    @Override
-    public User getUserFromJwtToken(String token) throws Exception {
-       String email = jwtProvider.getEmailFromToken(token);
-       User user = userRepository.findByEmail(email);
-       if(user==null){
-        throw new Exception("Invalid token");
+   @Override
+public User getUserFromJwtToken(String token) {
+    try {
+        // Extract email/username from token
+        String email = jwtProvider.getEmailFromToken(token);
 
-       }
-       return null;
+        if (email == null || email.isBlank()) {
+            System.out.println("Token has no email");
+            return null;
+        }
+
+        // Fetch user from DB
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            System.out.println("No user found for token");
+            return null;
+        }
+
+        return user;
+
+    } catch (Exception ex) {
+        System.out.println("JWT ERROR: " + ex.getMessage());
+        return null;
     }
+}
+
 
     @Override
     public User getCurrentUser() throws Exception {

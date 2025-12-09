@@ -21,16 +21,31 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/profile")
-    public ResponseEntity<UserDto> getUserProfile(
-            @RequestHeader("Authorization") String jwt) throws Exception {
+  @GetMapping("/profile")
+public ResponseEntity<UserDto> getUserProfile(
+        @RequestHeader("Authorization") String jwt) throws Exception {
 
-        User user = userService.getUserFromJwtToken(jwt);
-        if (user == null) {
-            return ResponseEntity.status(401).build(); // token invalid
-        }
-        return ResponseEntity.ok(UserMapper.toDto(user));
+    if (jwt == null || jwt.isBlank()) {
+        return ResponseEntity.status(401).build();
     }
+
+    // FIX: clean token, remove hidden Unicode characters
+    String token = jwt.replace("Bearer", "")
+                      .replace("bearer", "")
+                      .trim()
+                      .replace("\uFEFF", "") // remove BOM
+                      .replace("\u200B", ""); // remove zero-width space
+
+    User user = userService.getUserFromJwtToken(token);
+
+    if (user == null) {
+        return ResponseEntity.status(401).build();
+    }
+
+    return ResponseEntity.ok(UserMapper.toDto(user));
+}
+ 
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(

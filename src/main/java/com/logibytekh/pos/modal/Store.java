@@ -2,6 +2,7 @@ package com.logibytekh.pos.modal;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.logibytekh.pos.domain.StoreStatus;
 
 import jakarta.persistence.Column;
@@ -30,7 +31,7 @@ import lombok.Setter;
 @EqualsAndHashCode
 public class Store {
 
-    @Id
+@Id
 @GeneratedValue(strategy = GenerationType.AUTO)
 private Long id;
 
@@ -46,6 +47,7 @@ private User storeAdmin;
 @Column(name = "created_at")
 private LocalDateTime createdAt;
 
+@JsonIgnore
 @Column(name = "updated_at")
 private LocalDateTime updatedAt;
 
