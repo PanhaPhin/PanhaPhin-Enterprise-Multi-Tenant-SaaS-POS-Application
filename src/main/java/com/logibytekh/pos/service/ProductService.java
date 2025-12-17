@@ -13,7 +13,8 @@ public interface ProductService {
     void deleteProduct(Long id , User user) throws Exception;
     List<ProductDTO> getProducts(User user);
     List<ProductDTO> searchByKeyword(Long storeId, String keyword);
-
+    List<ProductDTO> getProductsByStoreId(Long storeId);
+    
 
 
 
