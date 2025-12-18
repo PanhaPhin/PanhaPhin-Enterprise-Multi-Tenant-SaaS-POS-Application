@@ -42,7 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
             .name(dto.getName())
             .build();
 
-            return CategoryMapper.toDTO(category);
+            checkAuthority(user, category.getStore());
+
+            return CategoryMapper.toDTO(categoryRespository.save(category));
      
     }
 
@@ -61,8 +63,9 @@ public class CategoryServiceImpl implements CategoryService {
             .orElseThrow(() -> new RuntimeException("Category not found"));
 
     User user = userService.getCurrentUser();
-
+    checkAuthority(user, category.getStore());
     category.setName(dto.getName());
+
 
     
     return CategoryMapper.toDTO(categoryRespository.save(category));
@@ -78,6 +81,10 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRespository.delete(category);
 
         User user = userService.getCurrentUser();
+
+        checkAuthority(user, category.getStore());
+
+
        
     }
 
@@ -89,7 +96,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
         if(!(isAdmin || !isSameStore) && !isManager){
-            throw new RuntimeException("You don't have permission to perform this action");
+            throw new Exception("You don't have permission to perform this action");
         }
 
     }
