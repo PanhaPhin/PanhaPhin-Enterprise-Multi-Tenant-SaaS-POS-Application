@@ -12,20 +12,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class ProductDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    
     private Long id;
 
-    @Column(nullable = false)
+   
     private String name;
 
 
-    @Column(nullable = false, unique = true)
+    
     private String sku;
 
     private String description;

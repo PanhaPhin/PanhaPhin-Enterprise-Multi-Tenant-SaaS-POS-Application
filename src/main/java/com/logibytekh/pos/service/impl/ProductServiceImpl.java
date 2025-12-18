@@ -2,7 +2,6 @@ package com.logibytekh.pos.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -12,11 +11,12 @@ import com.logibytekh.pos.modal.Product;
 import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.ProductDTO;
+import com.logibytekh.pos.payload.response.ApiResponse;
 import com.logibytekh.pos.repository.ProductRespository;
 import com.logibytekh.pos.repository.StoreRepository;
 import com.logibytekh.pos.service.ProductService;
-
 import lombok.RequiredArgsConstructor;
+
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO upadateProduct(Long id, ProductDTO productDTO, User user) {
+    public ProductDTO updateProduct(Long id, ProductDTO productDTO, User user) {
 
         Product product = productRespository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -56,14 +56,21 @@ public class ProductServiceImpl implements ProductService {
         return ProductMapper.toDto(savedProduct);
     }
 
-    @Override
-    public void deleteProduct(Long id, User user) throws Exception {
+   @Override
+public ApiResponse deleteProduct(Long id, User user) throws Exception {
+    Product product = productRespository.findById(id)
+            .orElseThrow(() -> new Exception("Product not found"));
+    
+    productRespository.delete(product);
 
-        Product product = productRespository.findById(id).orElseThrow(
-                () -> new Exception("product not found"));
-        productRespository.delete(product);
 
-    }
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage("Product deleted successfully");
+        return apiResponse;
+
+      
+}
+
 
     @Override
     public List<ProductDTO> searchByKeyword(Long storeId, String keyword) {
