@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.RequiredArgsConstructor;
@@ -26,55 +27,44 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    // CREATE CATEGORY
     @PostMapping
     public ResponseEntity<CategoryDTO> createCategory(
-        @RequestBody CategoryDTO categoryDTO)throws Exception{
-            return ResponseEntity.ok(
+            @RequestBody CategoryDTO categoryDTO) throws Exception {
+        return ResponseEntity.ok(
                 categoryService.createCategory(categoryDTO)
-            );
+        );
+    }
 
-
-        }
-
-         @GetMapping("/store/{storeId}")
+    // GET CATEGORIES BY STORE
+    @GetMapping("/store/{storeId}")
     public ResponseEntity<List<CategoryDTO>> getCategoriesByStoreId(
-        @PathVariable Long storeId)throws Exception{
-            return ResponseEntity.ok(
+            @PathVariable Long storeId) {
+        return ResponseEntity.ok(
                 categoryService.getCategoriesByStoreId(storeId)
-            );
+        );
+    }
 
-
-        }
-@GetMapping("/{id}")
+    // UPDATE CATEGORY
+    @PutMapping("/{id}")
     public ResponseEntity<CategoryDTO> updateCategory(
-        @RequestBody CategoryDTO categoryDTO,
-        @PathVariable Long id)throws Exception{
-            return ResponseEntity.ok(
+            @PathVariable Long id,
+            @RequestBody CategoryDTO categoryDTO) throws Exception {
+        return ResponseEntity.ok(
                 categoryService.updateCategory(id, categoryDTO)
-            );
+        );
+    }
 
+    // DELETE CATEGORY
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteCategory(
+            @PathVariable Long id) throws Exception {
 
-        }
+        categoryService.deleteCategory(id);
 
-        @DeleteMapping("/{id}")
-        public ResponseEntity<ApiResponse> deleteCategory(
-        @RequestBody CategoryDTO categoryDTO,
-        @PathVariable Long id)throws Exception{
+        ApiResponse response = new ApiResponse();
+        response.setMessage("Category deleted successfully");
 
-
-            categoryService.updateCategory(id,categoryDTO);
-            ApiResponse apiResponse = new ApiResponse();
-            apiResponse.setMessage("category deleted successfully");
-            return ResponseEntity.ok(
-                apiResponse
-            );
-
-
-        }
-
-        
-
-
-    
-    
+        return ResponseEntity.ok(response);
+    }
 }
