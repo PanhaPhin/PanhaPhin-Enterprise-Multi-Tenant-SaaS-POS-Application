@@ -42,7 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
             .name(dto.getName())
             .build();
 
-            return CategoryMapper.toDTO(category);
+            checkAuthority(user, category.getStore());
+
+            return CategoryMapper.toDTO(categoryRespository.save(category));
      
     }
 

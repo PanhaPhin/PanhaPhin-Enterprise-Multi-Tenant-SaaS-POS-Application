@@ -83,23 +83,16 @@ public ResponseEntity<ProductDTO> update(
 
 
 
-
-
-
-
 @DeleteMapping("/{id}")
 public ResponseEntity<ApiResponse> delete(
         @PathVariable Long id,
         @RequestHeader("Authorization") String jwt) throws Exception {
 
     User user = userService.getUserFromJwtToken(jwt);
-    ApiResponse response = productService.deleteProduct(id, user);
+    productService.deleteProduct(id, user);
+    ApiResponse response = new ApiResponse();
 
     return ResponseEntity.ok(response);
 }
-
-
-
-
 
 }

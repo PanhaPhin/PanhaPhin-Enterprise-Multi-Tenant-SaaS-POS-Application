@@ -1,15 +1,9 @@
 package com.logibytekh.pos.payload.dto;
 
-import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Builder
 @Data
@@ -34,6 +28,8 @@ public class ProductDTO {
     private String image;
 
     // private Category category
+
+    private CategoryDTO category;
 
     private Long categoryId;
 
