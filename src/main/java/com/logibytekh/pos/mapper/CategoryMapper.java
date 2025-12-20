@@ -3,8 +3,6 @@ package com.logibytekh.pos.mapper;
 import com.logibytekh.pos.modal.Category;
 import com.logibytekh.pos.payload.dto.CategoryDTO;
 import com.logibytekh.pos.modal.Store;
-import com.logibytekh.pos.payload.dto.StoreDTO;
-
 
 public class CategoryMapper {
     public static CategoryDTO toDTO(Category category){
@@ -15,14 +13,16 @@ public class CategoryMapper {
                 .name(category.getName())
                 .storeId(category.getStore()!= null?category.getStore().getId():null)
                 .build(); 
-    }
-
-     public static Category toEntity(CategoryDTO categoryDTO) {
+                
+                 public static Category toEntity(CategoryDTO categoryDTO) {
         if (categoryDTO == null) return null;
 
         return Category.builder()
                 .name(categoryDTO.getName())
-                .build(); // store will be set in service
+                .build();
+    },
+                
+
     }
     
 }

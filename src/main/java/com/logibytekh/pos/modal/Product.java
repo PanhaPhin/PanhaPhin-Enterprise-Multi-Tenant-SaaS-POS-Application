@@ -37,7 +37,7 @@ public class Product {
     private String sku;
 
     private String description;
- 
+
     @Column(nullable = false)
     private Double mrp;
 
@@ -65,15 +65,12 @@ public class Product {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-       
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-    
 
 
 

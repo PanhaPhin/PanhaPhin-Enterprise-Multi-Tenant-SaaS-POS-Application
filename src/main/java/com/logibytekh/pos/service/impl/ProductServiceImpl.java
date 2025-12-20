@@ -19,6 +19,12 @@ import com.logibytekh.pos.repository.ProductRespository;
 import com.logibytekh.pos.repository.StoreRepository;
 import com.logibytekh.pos.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import com.logibytekh.pos.modal.Category;
+import com.logibytekh.pos.repository.CategoryRespository;
+
+
+
+
 
 
 
@@ -35,16 +41,22 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO createProduct(ProductDTO productDTO, User user) throws Exception {
         Store store = storeRepository.findById(
                 productDTO.getStoreId()).orElseThrow(
-                        () -> new Exception("Store not found"));
+                        () -> new Exception("Store not found")
+        );
+
 
         Category category = categoryRespository.findById(
                 productDTO.getCategoryId()).orElseThrow(
                         () -> new Exception("Category not found"));
 
 
+        Category category = categoryRespository.findById(productDTO.getCategoryId()).orElseThrow(
+            () -> new Exception("Category not found")
+        );
+
+
         Product product = ProductMapper.toEntity(productDTO, store, category);
         Product saveProduct = productRespository.save(product);
-
         return ProductMapper.toDto(saveProduct);
     }
 
@@ -52,7 +64,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProduct(Long id, ProductDTO productDTO, User user) {
 
         Product product = productRespository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new RuntimeException("Product not found")
+        );
+
 
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
@@ -63,22 +77,24 @@ public class ProductServiceImpl implements ProductService {
         product.setBrand(productDTO.getBrand());
         product.setUpdatedAt(LocalDateTime.now());
 
+         if(productDTO.getCategoryId()!=null){
+                Category category = categoryRespository.findById(productDTO.getCategoryId()).orElseThrow(
+            () -> new RuntimeException("Category not found")
+        );
+        product.setCategory(category);
+
+        }
+
         Product savedProduct = productRespository.save(product);
         return ProductMapper.toDto(savedProduct);
     }
 
    @Override
-public ApiResponse deleteProduct(Long id, User user) throws Exception {
+    public void deleteProduct(Long id, User user) throws Exception {
     Product product = productRespository.findById(id)
             .orElseThrow(() -> new Exception("Product not found"));
     
-    productRespository.delete(product);
-
-
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setMessage("Product deleted successfully");
-        return apiResponse;
-
+            productRespository.delete(product);
       
 }
 

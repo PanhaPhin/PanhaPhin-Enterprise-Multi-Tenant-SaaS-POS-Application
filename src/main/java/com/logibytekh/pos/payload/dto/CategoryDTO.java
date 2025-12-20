@@ -1,4 +1,6 @@
 package com.logibytekh.pos.payload.dto;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,10 +12,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-
 public class CategoryDTO {
 
     private Long id;

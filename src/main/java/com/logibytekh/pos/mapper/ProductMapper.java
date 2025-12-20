@@ -6,13 +6,13 @@ import com.logibytekh.pos.payload.dto.ProductDTO;
 import com.logibytekh.pos.modal.Category;
 
 
+
 public class ProductMapper {
 
     public static ProductDTO toDto(Product product) {
         if(product == null){
             return null;
-        }
-      return ProductDTO.builder()
+        }return ProductDTO.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .sku(product.getSku())
@@ -20,13 +20,17 @@ public class ProductMapper {
                 .mrp(product.getMrp())
                 .sellingPrice(product.getSellingPrice())
                 .brand(product.getBrand())
+
+
+                .category(CategoryMapper.toDTO(product.getCategory()))
+                .storeId(product.getStore()!=null?product.getStore().getId():null)
+
                 .image(product.getImage())
                 .storeId(product.getStore() != null ? product.getStore().getId() : null)
                 .categoryId(product.getCategory() != null ? product.getCategory().getId() : null)
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .build();
-               
 
     }
 
@@ -35,7 +39,7 @@ public class ProductMapper {
             return null;
         }
         return Product.builder()
-              .name(productDTO.getName())
+                .name(productDTO.getName())
                 .sku(productDTO.getSku())
                 .description(productDTO.getDescription())
                 .mrp(productDTO.getMrp())
@@ -45,7 +49,19 @@ public class ProductMapper {
                 .store(store)
                 .category(category)
                 .build();
-               
+
+    public static Product toEntity(ProductDTO productDTO, Store store, Category category) {
+        return Product.builder()
+            .name(productDTO.getName())
+            .store(store)
+            .category(category)
+            .sku(productDTO.getSku())
+            .description(productDTO.getDescription())
+            .mrp(productDTO.getMrp())
+            .sellingPrice(productDTO.getSellingPrice())
+            .brand(productDTO.getBrand())
+            .build();
+
         
     }
     
