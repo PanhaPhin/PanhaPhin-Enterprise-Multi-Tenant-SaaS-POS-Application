@@ -56,7 +56,7 @@ public User getUserFromJwtToken(String token) {
             throw new Exception("user not found ");
         }
         return user;
-       
+
     }
 
     @Override
@@ -66,7 +66,6 @@ public User getUserFromJwtToken(String token) {
             throw new Exception("user not found ");
         }
         return user;
-       
     }
 
     @Override
@@ -81,7 +80,6 @@ public User getUserFromJwtToken(String token) {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
-      
     }
 
     

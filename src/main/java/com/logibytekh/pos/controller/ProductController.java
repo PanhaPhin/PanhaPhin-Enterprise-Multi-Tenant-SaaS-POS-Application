@@ -17,6 +17,9 @@ import com.logibytekh.pos.payload.dto.ProductDTO;
 import com.logibytekh.pos.payload.response.ApiResponse;
 import com.logibytekh.pos.service.ProductService;
 import com.logibytekh.pos.service.UserService;
+
+import jakarta.validation.Valid;
+
 import com.logibytekh.pos.modal.User;
 
 import lombok.RequiredArgsConstructor;
@@ -56,11 +59,10 @@ public class ProductController {
     @PatchMapping("/{id}")
 public ResponseEntity<ProductDTO> update(
         @PathVariable Long id,
-        @RequestBody ProductDTO productDTO,
+        @Valid @RequestBody ProductDTO productDTO,
         @RequestHeader("Authorization") String jwt) throws Exception {
             
     User user = userService.getUserFromJwtToken(jwt);
-
     return ResponseEntity.ok(
             productService.updateProduct(id, productDTO, user
             )
@@ -80,8 +82,6 @@ public ResponseEntity<ProductDTO> update(
             )
         );
     }
-
-
 
 
 

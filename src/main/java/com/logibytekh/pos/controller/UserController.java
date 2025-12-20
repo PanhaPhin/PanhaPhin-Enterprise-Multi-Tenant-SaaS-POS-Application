@@ -44,7 +44,6 @@ public ResponseEntity<UserDto> getUserProfile(
 
     return ResponseEntity.ok(UserMapper.toDto(user));
 }
- 
 
 
     @GetMapping("/{id}")

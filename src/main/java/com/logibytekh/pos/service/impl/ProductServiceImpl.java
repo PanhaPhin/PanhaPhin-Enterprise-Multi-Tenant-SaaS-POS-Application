@@ -13,21 +13,11 @@ import com.logibytekh.pos.modal.Product;
 import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.ProductDTO;
-import com.logibytekh.pos.payload.response.ApiResponse;
 import com.logibytekh.pos.repository.CategoryRespository;
 import com.logibytekh.pos.repository.ProductRespository;
 import com.logibytekh.pos.repository.StoreRepository;
 import com.logibytekh.pos.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import com.logibytekh.pos.modal.Category;
-import com.logibytekh.pos.repository.CategoryRespository;
-
-
-
-
-
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +46,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateProduct(Long id, ProductDTO productDTO, User user) {
-
         Product product = productRespository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found")
         );

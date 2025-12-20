@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.ProductDTO;
-import com.logibytekh.pos.payload.response.ApiResponse;
 
 public interface ProductService {
 

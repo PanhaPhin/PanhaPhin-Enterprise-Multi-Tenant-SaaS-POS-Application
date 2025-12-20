@@ -2,28 +2,35 @@ package com.logibytekh.pos.mapper;
 
 import com.logibytekh.pos.modal.Category;
 import com.logibytekh.pos.payload.dto.CategoryDTO;
-import com.logibytekh.pos.modal.Store;
+
 
 public class CategoryMapper {
-    public static CategoryDTO toDTO(Category category){
-         if (category == null) return null;
 
-        return CategoryDTO.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .storeId(category.getStore()!= null?category.getStore().getId():null)
-                .build();
-    }
-                
-        public static Category toEntity(CategoryDTO categoryDTO){
-            if (categoryDTO = null){
-                return null;
+    private CategoryMapper() {}
+
+    public static CategoryDTO toDTO(Category category) {
+        if (category == null) return null;
+
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(category.getId());
+        dto.setName(category.getName());
+        dto.setDescription(category.getDescription());
+
+        if (category.getStore() != null) {
+            dto.setStoreId(category.getStore().getId());
         }
-        return Category.builder()
-                .name(categoryDTO.getName())
-                .build();
-                
 
+        return dto;
     }
-    
+
+    public static Category toEntity(CategoryDTO dto) {
+        if (dto == null) return null;
+
+        Category category = new Category();
+        category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
+        // store set in service (recommended)
+
+        return category;
+    }
 }

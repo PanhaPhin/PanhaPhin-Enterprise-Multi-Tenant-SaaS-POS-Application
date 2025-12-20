@@ -56,6 +56,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public CategoryDTO getCategoryById(Long id) throws Exception {
+        Category category = categoryRespository.findById(id)
+                .orElseThrow(() -> new Exception("Category not found"));
+
+        User user = userService.getCurrentUser();
+        checkAuthority(user, category.getStore());
+
+        return CategoryMapper.toDTO(category);
+    }
+
+    @Override
     public CategoryDTO updateCategory(Long id, CategoryDTO dto) throws Exception {
         Category category = categoryRespository.findById(id)
                 .orElseThrow(() -> new Exception("Category not found"));
@@ -81,7 +92,9 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRespository.delete(category);
     }
 
+    // =========================
     // AUTHORIZATION CHECK
+    // =========================
     private void checkAuthority(User user, Store store) throws Exception {
         boolean isAdmin = user.getRole() == UserRole.ROLE_STORE_ADMIN;
         boolean isManager = user.getRole() == UserRole.ROLE_STORE_MANAGER;

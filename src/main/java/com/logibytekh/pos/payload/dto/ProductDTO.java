@@ -1,14 +1,10 @@
 package com.logibytekh.pos.payload.dto;
 
-
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,20 +18,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductDTO {
 
-    
     private Long id;
 
-    @NotNull
-    private String name;
+    
+    private String name;;
 
-    @NotNull
     private String sku;
 
     private String description;
 
-    @NotNull
     private Double mrp;
 
+    @JsonProperty("selling_price")
     @NotNull
     private Double sellingPrice;
 
@@ -45,11 +39,13 @@ public class ProductDTO {
 
     // private Category category
 
+    @JsonProperty("category_id")
     private Long categoryId;
+
+    @JsonProperty("store_id")
     private Long storeId;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    
 }
