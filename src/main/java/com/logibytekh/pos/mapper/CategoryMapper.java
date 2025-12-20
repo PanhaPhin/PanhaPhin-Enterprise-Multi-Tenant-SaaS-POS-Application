@@ -12,15 +12,16 @@ public class CategoryMapper {
                 .id(category.getId())
                 .name(category.getName())
                 .storeId(category.getStore()!= null?category.getStore().getId():null)
-                .build(); 
+                .build();
+    }
                 
-                 public static Category toEntity(CategoryDTO categoryDTO) {
-        if (categoryDTO == null) return null;
-
+        public static Category toEntity(CategoryDTO categoryDTO){
+            if (categoryDTO = null){
+                return null;
+        }
         return Category.builder()
                 .name(categoryDTO.getName())
                 .build();
-    },
                 
 
     }

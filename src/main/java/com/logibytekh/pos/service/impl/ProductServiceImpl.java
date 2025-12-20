@@ -49,12 +49,6 @@ public class ProductServiceImpl implements ProductService {
                 productDTO.getCategoryId()).orElseThrow(
                         () -> new Exception("Category not found"));
 
-
-        Category category = categoryRespository.findById(productDTO.getCategoryId()).orElseThrow(
-            () -> new Exception("Category not found")
-        );
-
-
         Product product = ProductMapper.toEntity(productDTO, store, category);
         Product saveProduct = productRespository.save(product);
         return ProductMapper.toDto(saveProduct);
@@ -95,7 +89,6 @@ public class ProductServiceImpl implements ProductService {
             .orElseThrow(() -> new Exception("Product not found"));
     
             productRespository.delete(product);
-      
 }
 
 
