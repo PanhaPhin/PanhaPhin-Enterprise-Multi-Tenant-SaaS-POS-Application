@@ -2,9 +2,11 @@ package com.logibytekh.pos.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import com.logibytekh.pos.modal.Category;
 
 import com.logibytekh.pos.mapper.ProductMapper;
 import com.logibytekh.pos.modal.Product;
@@ -12,10 +14,13 @@ import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.ProductDTO;
 import com.logibytekh.pos.payload.response.ApiResponse;
+import com.logibytekh.pos.repository.CategoryRespository;
 import com.logibytekh.pos.repository.ProductRespository;
 import com.logibytekh.pos.repository.StoreRepository;
 import com.logibytekh.pos.service.ProductService;
 import lombok.RequiredArgsConstructor;
+
+
 
 
 @Service
@@ -24,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRespository productRespository;
     private final StoreRepository storeRepository;
+    private final CategoryRespository categoryRespository;
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO, User user) throws Exception {
@@ -31,7 +37,12 @@ public class ProductServiceImpl implements ProductService {
                 productDTO.getStoreId()).orElseThrow(
                         () -> new Exception("Store not found"));
 
-        Product product = ProductMapper.toEntity(productDTO, store);
+        Category category = categoryRespository.findById(
+                productDTO.getCategoryId()).orElseThrow(
+                        () -> new Exception("Category not found"));
+
+
+        Product product = ProductMapper.toEntity(productDTO, store, category);
         Product saveProduct = productRespository.save(product);
 
         return ProductMapper.toDto(saveProduct);

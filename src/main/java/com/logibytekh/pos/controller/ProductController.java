@@ -84,9 +84,6 @@ public ResponseEntity<ProductDTO> update(
 
 
 
-
-
-
 @DeleteMapping("/{id}")
 public ResponseEntity<ApiResponse> delete(
         @PathVariable Long id,

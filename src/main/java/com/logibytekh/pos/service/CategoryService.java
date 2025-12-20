@@ -12,5 +12,7 @@ public interface  CategoryService {
     CategoryDTO updateCategory(Long id, CategoryDTO dto) throws Exception ; 
     void deleteCategory(Long id) throws Exception;
 
+    CategoryDTO getCategoryById(Long id) throws Exception ;
+
     
 }

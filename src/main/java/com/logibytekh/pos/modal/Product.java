@@ -2,7 +2,6 @@ package com.logibytekh.pos.modal;
 
 import java.time.LocalDateTime;
 
-import com.logibytekh.pos.domain.StoreStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,16 +37,22 @@ public class Product {
     private String sku;
 
     private String description;
-
+ 
+    @Column(nullable = false)
     private Double mrp;
 
+    @Column(nullable = false)
     private Double sellingPrice;
+    
+    @Column(nullable = false)
     private String brand;
+
     private String image;
 
-    // private Category category
+    @ManyToOne(optional = false)
+    private Category category;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Store store;
 
     private LocalDateTime createdAt;
