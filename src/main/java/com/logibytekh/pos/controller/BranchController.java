@@ -1,15 +1,19 @@
 package com.logibytekh.pos.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.logibytekh.pos.payload.dto.BranchDTO;
 import com.logibytekh.pos.service.BranchService;
+
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,16 +34,41 @@ public class BranchController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<BranchDTO> getAllBranchesByStoreId(
+    public ResponseEntity<BranchDTO> getBranchById(
         @PathVariable Long id
 
     ) throws Exception{
 
-        BranchDTO createBranch = branchService.geBranchDTO(id);
-
+        BranchDTO createBranch = branchService.getBranchById(id);
         return ResponseEntity.ok(createBranch);
 
     }
+
+    @GetMapping("/store/{storeId}")
+    public ResponseEntity<List<BranchDTO>> getAllBranchesByStoreId(
+        @PathVariable Long storeId
+
+    ) throws Exception{
+
+        List <BranchDTO> createBranch = branchService.getBranchesByStoreId(storeId);
+        return ResponseEntity.ok(createBranch);
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BranchDTO> updateBranch(
+        @PathVariable Long id,
+        @RequestBody BranchDTO branchDTO
+        
+
+    ) throws Exception{
+
+        BranchDTO createBranch = branchService.updateBranch(id,branchDTO, null);
+        return ResponseEntity.ok(createBranch);
+
+    }
+
+
 
 
 

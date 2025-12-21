@@ -12,7 +12,7 @@ public interface BranchService {
     BranchDTO updateBranch (Long id, BranchDTO branchDTO, User user) throws Exception;
     void deleteBranchDTO (Long id) throws Exception;
     List<BranchDTO> getBranchesByStoreId (Long storeId);
-    BranchDTO geBranchDTO(Long id);
+    BranchDTO getBranchById(Long id);
 
     
     

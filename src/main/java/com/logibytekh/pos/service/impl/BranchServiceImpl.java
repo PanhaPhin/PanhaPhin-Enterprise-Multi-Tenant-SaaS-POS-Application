@@ -80,7 +80,7 @@ public class BranchServiceImpl  implements BranchService    {
     }
 
     @Override
-    public BranchDTO geBranchDTO(Long id) {
+    public BranchDTO getBranchById(Long id) {
        Branch exiting = branchRepository.findById(id).orElseThrow(
         ()-> new RuntimeException("branch not found")
        );
