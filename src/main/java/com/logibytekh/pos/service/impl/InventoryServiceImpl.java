@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.logibytekh.pos.mapper.InventoryMapper;
 import com.logibytekh.pos.modal.Branch;
+import com.logibytekh.pos.modal.Inventory;
 import com.logibytekh.pos.modal.Product;
 import com.logibytekh.pos.payload.dto.InventoryDTO;
 import com.logibytekh.pos.repository.BranchRespository;
@@ -12,7 +14,9 @@ import com.logibytekh.pos.repository.InventoryRespository;
 import com.logibytekh.pos.repository.ProductRespository;
 import com.logibytekh.pos.service.InventoryService;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
 
 
 
@@ -20,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService{
 
-    private final InventoryRespository inventoryRespository;
+    private final InventoryRespository inventoryRepository;
     private final BranchRespository branchRespoitory;
     private final ProductRespository productRespository;
 
@@ -28,7 +32,7 @@ public class InventoryServiceImpl implements InventoryService{
     @Override
     public InventoryDTO createInventory(InventoryDTO inventoryDTO) throws Exception {
 
-        Branch exiting = branchRespoitory.findById(inventoryDTO.getBranchId()).orElseThrow(
+        Branch branch = branchRespoitory.findById(inventoryDTO.getBranchId()).orElseThrow(
             ()-> new Exception ("branch not exist...")
 
         );
@@ -38,17 +42,29 @@ public class InventoryServiceImpl implements InventoryService{
 
 
             );
-               
 
+        Inventory inventory = InventoryMapper.toEntity(inventoryDTO, branch, product);
+        Inventory savedInventory = inventoryRepository.save(inventory);
 
-        return null;
+        
+        return InventoryMapper.toDTO(savedInventory);
     }
 
-    @Override
-    public InventoryDTO updateInventory(InventoryDTO inventoryDTO) {
-        throw new UnsupportedOperationException("Not supported yet.");
+   @Override
+    public InventoryDTO updateInventory(Long id, InventoryDTO inventoryDTO) {
+
+        Inventory inventory = inventoryRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Inventory not found with id: " + id));
+
+        inventory.setQuantity(inventoryDTO.getQuantity());
+
+        Inventory updatedInventory = inventoryRepository.save(inventory);
+        return InventoryMapper.toDTO(updatedInventory);
     }
 
+
+    
     @Override
     public void deleteInventory(Long id) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -68,5 +84,14 @@ public class InventoryServiceImpl implements InventoryService{
     public List<InventoryDTO> getAllInventoryByBranchId(Long branchId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public InventoryDTO updateInventory(InventoryDTO inventoryDTO) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateInventory'");
+    }
+
+
+
     
 }
