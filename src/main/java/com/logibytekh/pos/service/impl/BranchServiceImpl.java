@@ -44,7 +44,7 @@ public class BranchServiceImpl  implements BranchService    {
     }
 
     @Override
-    public BranchDTO updateBranch(Long id, BranchDTO branchDTO, User user) throws Exception {
+    public BranchDTO updateBranch(Long id, BranchDTO branchDTO) throws Exception {
        Branch exiting = branchRepository.findById(id).orElseThrow(
           ()-> new Exception("Branch not found")
        );
@@ -86,5 +86,7 @@ public class BranchServiceImpl  implements BranchService    {
        );
        return BranchMapper.tDto(exiting);
     }
+
+    
     
 }

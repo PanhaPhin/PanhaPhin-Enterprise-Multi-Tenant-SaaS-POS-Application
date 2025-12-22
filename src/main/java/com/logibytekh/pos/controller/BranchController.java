@@ -3,6 +3,7 @@ package com.logibytekh.pos.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.logibytekh.pos.payload.dto.BranchDTO;
+import com.logibytekh.pos.payload.response.ApiResponse;
 import com.logibytekh.pos.service.BranchService;
-
-
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -63,15 +63,24 @@ public class BranchController {
 
     ) throws Exception{
 
-        BranchDTO createBranch = branchService.updateBranch(id,branchDTO, null);
+        BranchDTO createBranch = branchService.updateBranch(id,branchDTO);
         return ResponseEntity.ok(createBranch);
 
     }
 
+   
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteBranchById(
 
+        @PathVariable Long id
 
+    ) throws Exception{
 
+        branchService.deleteBranchDTO(id);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage("branch deleted successfully");
+        return ResponseEntity.ok(apiResponse);
 
-
+    }
     
 }

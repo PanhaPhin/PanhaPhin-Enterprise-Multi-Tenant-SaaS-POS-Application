@@ -9,7 +9,7 @@ public interface BranchService {
     
 
     BranchDTO createBranch (BranchDTO branchDTO) throws UserException, Exception;
-    BranchDTO updateBranch (Long id, BranchDTO branchDTO, User user) throws Exception;
+    BranchDTO updateBranch (Long id, BranchDTO branchDTO) throws Exception;
     void deleteBranchDTO (Long id) throws Exception;
     List<BranchDTO> getBranchesByStoreId (Long storeId);
     BranchDTO getBranchById(Long id);
