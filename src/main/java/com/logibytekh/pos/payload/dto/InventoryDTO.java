@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor          
-@AllArgsConstructor        
+@NoArgsConstructor
+@AllArgsConstructor
 public class InventoryDTO {
 
     private Long id;
