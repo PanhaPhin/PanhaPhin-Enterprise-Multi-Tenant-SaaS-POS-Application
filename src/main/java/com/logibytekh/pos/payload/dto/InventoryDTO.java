@@ -2,6 +2,8 @@ package com.logibytekh.pos.payload.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +17,15 @@ public class InventoryDTO {
 
     private Long id;
 
-    private BranchDTO branch;
 
+
+    @JsonProperty("branch_id")
     private Long branchId;
-    
+
+    @JsonProperty("product_id")
     private Long productId;
 
-    private ProductDTO product;
+    
 
     private Integer quantity;
 

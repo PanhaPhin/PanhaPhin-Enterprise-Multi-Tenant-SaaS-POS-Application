@@ -32,14 +32,17 @@ public class InventoryServiceImpl implements InventoryService{
 
     @Override
     public InventoryDTO createInventory(InventoryDTO inventoryDTO) throws Exception {
+      
        Branch branch = branchRepository.findById(inventoryDTO.getBranchId())
-               .orElseThrow(() -> new Exception("Branch not found with id: ")
-            
-            );
-            Product product = productRespository.findById(inventoryDTO.getProductId())
-               .orElseThrow(() -> new Exception("Product not found with id: ")
-            
-            );
+       .orElseThrow(() -> new Exception(
+           "Branch not found with id: " + inventoryDTO.getBranchId()
+       ));
+
+       Product product = productRespository.findById(inventoryDTO.getProductId())
+       .orElseThrow(() -> new Exception(
+           "Product not found with id: " + inventoryDTO.getProductId()
+       ));
+
 
             Inventory inventory = InventoryMapper.toEntity(inventoryDTO, branch, product);
             Inventory savedInventory = inventoryRespository.save(inventory);

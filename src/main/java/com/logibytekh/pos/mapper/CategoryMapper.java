@@ -14,7 +14,7 @@ public class CategoryMapper {
         CategoryDTO dto = new CategoryDTO();
         dto.setId(category.getId());
         dto.setName(category.getName());
-        dto.setDescription(category.getDescription());
+       
 
         if (category.getStore() != null) {
             dto.setStoreId(category.getStore().getId());
@@ -28,8 +28,7 @@ public class CategoryMapper {
 
         Category category = new Category();
         category.setName(dto.getName());
-        category.setDescription(dto.getDescription());
-        // store set in service (recommended)
+       
 
         return category;
     }
