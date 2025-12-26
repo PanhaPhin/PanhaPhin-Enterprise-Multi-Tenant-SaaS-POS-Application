@@ -22,5 +22,14 @@ public class UserMapper {
         
         
     }
+
+    public static User toEntity(UserDto userDto){
+        User createUser = new User();
+
+        
+        return createUser;
+        
+
+    }
     
 }
