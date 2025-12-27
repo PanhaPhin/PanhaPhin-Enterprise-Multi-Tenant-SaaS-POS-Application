@@ -1,6 +1,8 @@
 package com.logibytekh.pos.service.impl;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,6 @@ import com.logibytekh.pos.repository.UserRepository;
 import com.logibytekh.pos.service.EmployeeService;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-
-
-
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -60,36 +57,84 @@ public class EmployeesServiceImpl implements EmployeeService {
         if (employee.getRole() == UserRole.ROLE_STORE_MANAGER) {
             branch.setManager(savedEmployee);
             branchRepository.save(branch);
-            
-        }
 
+        }
 
         return UserMapper.toDto(savedEmployee);
     }
 
     @Override
-    public UserDto createBranchEmployee(UserDto emloyee, Long branchId) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public UserDto createBranchEmployee(UserDto employee, Long branchId) throws Exception {
+
+        Branch branch = branchRepository.findById(branchId).orElseThrow(
+                () -> new Exception("Branch not found")
+
+        );
+
+        if (employee.getRole() != UserRole.ROLE_BRAMCH_CASHIHER || employee.getRole() != UserRole.ROLE_STORE_MANAGER) {
+
+            User user = UserMapper.toEntity(employee);
+            user.setBranch(branch);
+            user.setPassword(passwordEncoder.encode(employee.getPassword()));
+            return UserMapper.toDto(userRepository.save(user));
+
+        }
+        throw new Exception("Invalid role for branch employee");
+
     }
 
     @Override
-    public User updateEmployee(Long employeeId, User employeeDetails) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public User updateEmployee(Long employeeId, UserDto employeeDetails) throws Exception {
+
+        User existingEmployee = userRepository.findById(employeeId).orElseThrow(
+                () -> new RuntimeException("Employee not found"));
+
+        Branch branch = branchRepository.findById(employeeDetails.getBranchId()).orElseThrow(
+                () -> new Exception("Branch not found")
+
+        );
+
+        existingEmployee.setEmail(employeeDetails.getEmail());
+        existingEmployee.setFullName(employeeDetails.getFullName());
+        existingEmployee.setPassword(employeeDetails.getPassword());
+        existingEmployee.setRole(employeeDetails.getRole());
+        existingEmployee.setBranch(branch);
+        return userRepository.save(existingEmployee);
     }
 
     @Override
     public void deleteEmloyee(Long employeeId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        User employee = userRepository.findById(employeeId).orElseThrow(
+                () -> new RuntimeException("Employee not found"));
+        userRepository.delete(employee);
     }
 
     @Override
-    public List<User> findStoreEmployees(Long storeId, UserRole role) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<User> findStoreEmployees(Long storeId, UserRole role) throws Exception {
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                () -> new Exception("Store not found")
+
+        );
+        return userRepository.findByStore(store).stream().filter(
+                user -> role == null || user.getRole() == role)
+                .collect(Collectors.toList());
+
     }
 
     @Override
-    public List<User> findBranchEmployees(Long branchId, UserRole role) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<User> findBranchEmployees(Long branchId, UserRole role) throws Exception {
+
+        Branch branch = branchRepository.findById(branchId).orElseThrow(
+                () -> new RuntimeException("Branch not found")
+
+        );
+
+        List<User> employee = userRepository.findByBranchId(branchId)
+                .stream().filter(
+                        user -> role == null || user.getRole() == role)
+                .collect(Collectors.toList());
+
+        return List.of();
     }
 
 }
