@@ -44,8 +44,10 @@ public class User {
     private Store store;
 
     @ManyToOne
+    @JoinColumn(name = "branch_id")
     private Branch branch;
 
+    @Column(length = 20)
     private String phone;
 
     @Column(nullable = false)
