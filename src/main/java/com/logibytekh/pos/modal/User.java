@@ -37,9 +37,14 @@ public class User {
     @Email(message = "Email should be valid")
     private String email;
 
+
+
     @ManyToOne
     @JoinColumn(name="store_id")
     private Store store;
+
+    @ManyToOne
+    private Branch branch;
 
     private String phone;
 
