@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -47,6 +48,7 @@ public class Branch {
 
     private LocalTime openTime;
 
+    @Column(name = "close_time")
     private LocalTime closeTime;
 
     private LocalDateTime createdAt;
