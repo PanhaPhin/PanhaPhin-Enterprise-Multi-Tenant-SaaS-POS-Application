@@ -51,13 +51,13 @@ public StoreDTO createStore(StoreDTO storeDTO, User user) {
     @Override
     public Store getStoreByAdmin() throws Exception {
         User admin = userService.getCurrentUser();
-        Store store = storeRepository.findByStoreAdminId(admin.getId());
+        List<Store> store = storeRepository.findByStoreAdminId(admin.getId());
 
         if (store == null) {
             throw new Exception("Store not found for this admin");
         }
 
-        return store;
+        return store.get(0);
     }
 
     @Override

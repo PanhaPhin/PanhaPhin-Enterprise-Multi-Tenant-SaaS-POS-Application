@@ -2,6 +2,7 @@ package com.logibytekh.pos.mapper;
 
 import java.time.LocalDateTime;
 
+
 import com.logibytekh.pos.modal.Branch;
 import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.payload.dto.BranchDTO;
@@ -18,7 +19,7 @@ public class BranchMapper {
                 .closeTime(branch.getCloseTime())
                 .openTime(branch.getOpenTime())
                 .workingDays(branch.getWorkingDays())
-                .storeId(branch.getStore()!=null?branch.getStore().getId():null)
+                .storeId(branch.getStore() != null ? branch.getStore().getId() : null)
                 .createdAt(branch.getCreatedAt())
                 .updatedAt(branch.getUpdatedAt())
                 .build();

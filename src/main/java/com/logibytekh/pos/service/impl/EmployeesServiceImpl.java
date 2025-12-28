@@ -110,19 +110,20 @@ public class EmployeesServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<User> findStoreEmployees(Long storeId, UserRole role) throws Exception {
+    public List<UserDto> findStoreEmployees(Long storeId, UserRole role) throws Exception {
         Store store = storeRepository.findById(storeId).orElseThrow(
                 () -> new Exception("Store not found")
 
         );
         return userRepository.findByStore(store).stream().filter(
                 user -> role == null || user.getRole() == role)
+                .map(UserMapper::toDto)
                 .collect(Collectors.toList());
 
     }
 
     @Override
-    public List<User> findBranchEmployees(Long branchId, UserRole role) throws Exception {
+    public List<UserDto> findBranchEmployees(Long branchId, UserRole role) throws Exception {
 
         Branch branch = branchRepository.findById(branchId).orElseThrow(
                 () -> new RuntimeException("Branch not found")
