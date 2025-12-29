@@ -60,16 +60,14 @@ public class EmployeeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteEmployee(
-            @PathVariable Long id
-    )throws Exception {
-                employeeService.deleteEmloyee(id);
-                ApiResponse apiResponse = new ApiResponse();
-                apiResponse.setMessage("Employee deleted");
-                return ResponseEntity.ok(apiResponse);
+            @PathVariable Long id) throws Exception {
+        employeeService.deleteEmloyee(id);
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage("Employee deleted");
+        return ResponseEntity.ok(apiResponse);
     }
 
-
-     @GetMapping("/store/{id}")
+    @GetMapping("/store/{id}")
     public ResponseEntity<List<UserDto>> storeEmployee(
             @PathVariable Long id,
             @RequestParam(required = false) UserRole userRole) throws Exception {
@@ -80,10 +78,10 @@ public class EmployeeController {
     @GetMapping("/branch/{id}")
     public ResponseEntity<List<UserDto>> branchEmployee(
             @PathVariable Long id,
-            @RequestParam (required = false) UserRole userRole ) throws Exception {
-                List<UserDto> employee = employeeService.findStoreEmployees(id, userRole);
-        return ResponseEntity.ok(employee);
+            @RequestParam(required = false) UserRole userRole) throws Exception {
 
+        return ResponseEntity.ok(
+                employeeService.findBranchEmployees(id, userRole));
     }
 
 }

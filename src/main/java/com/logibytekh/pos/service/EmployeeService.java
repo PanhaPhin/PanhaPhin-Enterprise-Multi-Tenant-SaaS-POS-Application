@@ -13,7 +13,8 @@ public interface  EmployeeService {
     User updateEmployee(Long employeeId, UserDto employeeDetails) throws Exception;
     void deleteEmloyee(Long employeeId);
     List<UserDto> findStoreEmployees(Long storeId, UserRole role) throws Exception;
-    List <UserDto> findBranchEmployees(Long branchId, UserRole role) throws Exception;
+    List<UserDto> findBranchEmployees(Long branchId, UserRole userRole) throws Exception;
+
     
 
 

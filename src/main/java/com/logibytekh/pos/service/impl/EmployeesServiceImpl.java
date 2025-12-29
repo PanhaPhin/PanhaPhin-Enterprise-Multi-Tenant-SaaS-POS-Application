@@ -111,31 +111,29 @@ public class EmployeesServiceImpl implements EmployeeService {
 
     @Override
     public List<UserDto> findStoreEmployees(Long storeId, UserRole role) throws Exception {
-        Store store = storeRepository.findById(storeId).orElseThrow(
-                () -> new Exception("Store not found")
 
-        );
-        return userRepository.findByStore(store).stream().filter(
-                user -> role == null || user.getRole() == role)
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new Exception("Store not found"));
+
+        return userRepository.findByStore(store)
+                .stream()
+                .filter(user -> role == null || user.getRole() == role)
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());
-
     }
+
+    // ========================= FIND BRANCH EMPLOYEES =========================
 
     @Override
     public List<UserDto> findBranchEmployees(Long branchId, UserRole role) throws Exception {
 
-        Branch branch = branchRepository.findById(branchId).orElseThrow(
-                () -> new RuntimeException("Branch not found")
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new Exception("Branch not found"));
 
-        );
-
-        List<User> employee = userRepository.findByBranchId(branchId)
-                .stream().filter(
-                        user -> role == null || user.getRole() == role)
+        return userRepository.findByBranch(branch)
+                .stream()
+                .filter(user -> role == null || user.getRole() == role)
+                .map(UserMapper::toDto)
                 .collect(Collectors.toList());
-
-        return List.of();
     }
-
 }
