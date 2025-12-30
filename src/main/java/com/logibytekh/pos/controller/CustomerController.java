@@ -16,6 +16,7 @@ import com.logibytekh.pos.modal.Customer;
 import com.logibytekh.pos.payload.response.ApiResponse;
 import com.logibytekh.pos.service.CustomerService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -25,11 +26,11 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @PostMapping()
-    public ResponseEntity<Customer> create(@RequestBody Customer customer) {
+    @PostMapping
+    public ResponseEntity<Customer> create(@Valid @RequestBody Customer customer) {
         return ResponseEntity.ok(customerService.createCustomer(customer));
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<Customer> update(
             @PathVariable Long id,
@@ -53,13 +54,10 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
-
     @GetMapping("/search")
     public ResponseEntity<List<Customer>> search(
-        @RequestBody String q
-    ) throws Exception {
+            @RequestBody String q) throws Exception {
         return ResponseEntity.ok(customerService.searchCustomers(q));
     }
-
 
 }

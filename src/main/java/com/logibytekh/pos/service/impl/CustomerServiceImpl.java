@@ -18,6 +18,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer createCustomer(Customer customer) {
+        // Ensure fullName is not null
+        if (customer.getFullName() == null || customer.getFullName().isBlank()) {
+            throw new IllegalArgumentException("Full name cannot be blank");
+        }
         return customerRepository.save(customer);
     }
 
