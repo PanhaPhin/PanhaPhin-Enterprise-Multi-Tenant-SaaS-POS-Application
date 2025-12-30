@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.logibytekh.pos.modal.Customer;
-import com.logibytekh.pos.repository.CustomerRespository;
+import com.logibytekh.pos.repository.CustomerRepository;
 import com.logibytekh.pos.service.CustomerService;
 
 import lombok.RequiredArgsConstructor;
@@ -14,49 +14,48 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
-    private final CustomerRespository customerRespository;
+    private final CustomerRepository customerRepository;
 
     @Override
     public Customer createCustomer(Customer customer) {
-        return customerRespository.save(customer);
-        
-
+        return customerRepository.save(customer);
     }
 
     @Override
-    public Customer updatCustomer(Long id, Customer customer) throws Exception {
-        Customer customerToUpdate = customerRespository.findById(id)
+    public Customer updateCustomer(Long id, Customer customer) throws Exception {
+        Customer customerToUpdate = customerRepository.findById(id)
                 .orElseThrow(() -> new Exception("Customer not found"));
 
-                customer.setFullName(customer.getFullName());
-                customer.setEmail(customer.getEmail());
-                customer.setPhone(customer.getPhone());
+        customerToUpdate.setFullName(customer.getFullName());
+        customerToUpdate.setEmail(customer.getEmail());
+        customerToUpdate.setPhone(customer.getPhone());
 
-                return customerRespository.save(customer);
+        return customerRepository.save(customerToUpdate);
     }
 
     @Override
     public void deleteCustomer(Long id) throws Exception {
-        Customer customerToUpdate = customerRespository.findById(id)
+        Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new Exception("Customer not found"));
 
-        customerRespository.delete(customerToUpdate);
+        customerRepository.delete(customer);
     }
 
     @Override
     public Customer getCustomer(Long id) throws Exception {
-       return customerRespository.findById(id)
+        return customerRepository.findById(id)
                 .orElseThrow(() -> new Exception("Customer not found"));
     }
 
     @Override
-    public List<Customer> getAllCustomer() throws Exception {
-       return customerRespository.findAll();
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
     }
 
     @Override
-    public List<Customer> searchCustomers(String keyword) throws Exception {
-      return customerRespository.findbyFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(keyword, keyword);
+    public List<Customer> searchCustomers(String keyword) {
+        return customerRepository
+                .findByFullNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                        keyword, keyword);
     }
-    
 }

@@ -29,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
-    private final CustomUserImplement customUserImplement;
+    private final UserDetailsServiceImpl customUserImplement;
 
     @Override
     public AuthResponse signup(UserDto userDto) throws Exception {

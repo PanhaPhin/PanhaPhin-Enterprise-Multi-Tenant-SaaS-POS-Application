@@ -29,12 +29,12 @@ public class CustomerController {
     public ResponseEntity<Customer> create(@RequestBody Customer customer) {
         return ResponseEntity.ok(customerService.createCustomer(customer));
     }
-
+    
     @PutMapping("/{id}")
     public ResponseEntity<Customer> update(
             @PathVariable Long id,
             @RequestBody Customer customer) throws Exception {
-        return ResponseEntity.ok(customerService.updatCustomer(id, customer));
+        return ResponseEntity.ok(customerService.updateCustomer(id, customer));
 
     }
 
@@ -50,7 +50,7 @@ public class CustomerController {
 
     @GetMapping()
     public ResponseEntity<List<Customer>> getAll() throws Exception {
-        return ResponseEntity.ok(customerService.getAllCustomer());
+        return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
 
