@@ -3,12 +3,15 @@ package com.logibytekh.pos.modal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.logibytekh.pos.domain.PaymentType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,5 +45,12 @@ public class Order {
 
     @OneToMany
     private List<OrderItem> items;
+
+    private PaymentType paymentType;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
     
 }
