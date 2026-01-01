@@ -1,5 +1,7 @@
 package com.logibytekh.pos.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,31 +77,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-public List<OrderDTO> getOrdersByBranchId(Long branchId, Long customerId, Long cashierId,
-        PaymentType paymentType, OrderStatus status) throws Exception {
+    public List<OrderDTO> getOrdersByBranch(Long branchId, Long customerId, Long cashierId,
+            PaymentType paymentType, OrderStatus status) throws Exception {
 
-    return orderRespository.findByBranchId(branchId).stream()
-            .filter(order -> customerId == null
-                    || (order.getCustomer() != null && order.getCustomer().getId().equals(customerId)))
-            .filter(order -> cashierId == null
-                    || (order.getCashier() != null && order.getCashier().getId().equals(cashierId)))
-            .filter(order -> paymentType == null
-                    || order.getPaymentType() == paymentType)
-            .map(OrderMapper::toDTO)
-            .collect(Collectors.toList()); // <- semicolon added
-}
-
+        return orderRespository.findByBranchId(branchId).stream()
+                .filter(order -> customerId == null
+                        || (order.getCustomer() != null && order.getCustomer().getId().equals(customerId)))
+                .filter(order -> cashierId == null
+                        || (order.getCashier() != null && order.getCashier().getId().equals(cashierId)))
+                .filter(order -> paymentType == null
+                        || order.getPaymentType() == paymentType)
+                .map(OrderMapper::toDTO)
+                .collect(Collectors.toList()); // <- semicolon added
+    }
 
     @Override
     public List<OrderDTO> getOrderByCashierId(Long cashierId) {
-       return orderRespository.findByCashierId(cashierId).stream()
+        return orderRespository.findByCashierId(cashierId).stream()
                 .map(OrderMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteOrder(Long id) throws Exception {
-          Order order = orderRespository.findById(id)
+        Order order = orderRespository.findById(id)
                 .orElseThrow(() -> new Exception("Order not found "));
 
         orderRespository.delete(order);
@@ -107,20 +108,30 @@ public List<OrderDTO> getOrdersByBranchId(Long branchId, Long customerId, Long c
 
     @Override
     public List<OrderDTO> getTodayOrdersByBranch(Long branchId) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTodayOrdersByBranch'");
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay();
+
+        return orderRespository.findByBranchIdAndCreatedAtBetween(branchId, start, end)
+                .stream()
+                .map(OrderMapper::toDTO)
+                .collect(Collectors.toList());
+
     }
 
     @Override
     public List<OrderDTO> getOrdersByCustomerId(Long customerId) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getOrdersByCustomerId'");
+        return orderRespository.findByCustomerId(customerId).stream()
+                .map(OrderMapper::toDTO)
+                .collect(Collectors.toList());
+
     }
 
     @Override
     public List<OrderDTO> getTop5RecentOrdersByBranch(Long branchId) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTop5RecentOrdersByBranch'");
+        return orderRespository.findTop5ByOrderByCreatedAtDesc(branchId).stream()
+                .map(OrderMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 }
