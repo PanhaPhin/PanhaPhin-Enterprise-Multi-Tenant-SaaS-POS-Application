@@ -26,8 +26,8 @@ public class InventoryMapper {
             return null;
 
         return Inventory.builder()
-                .branch(branch) // Must be not null
-                .product(product) // Must be not null
+                .branch(branch)
+                .product(product)
                 .quantity(inventoryDTO.getQuantity())
                 .build();
     }

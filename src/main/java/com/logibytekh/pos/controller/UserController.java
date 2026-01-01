@@ -22,36 +22,60 @@ public class UserController {
     private final UserService userService;
 
   @GetMapping("/profile")
-public ResponseEntity<UserDto> getUserProfile(
-        @RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<UserDto> getUserProfile(
+            @RequestHeader(value = "Authorization", required = false) String jwt) throws Exception {
 
-    if (jwt == null || jwt.isBlank()) {
-        return ResponseEntity.status(401).build();
+        if (jwt == null || jwt.isBlank()) {
+            System.out.println("Authorization header is missing or blank");
+            return ResponseEntity.status(401).build();
+        }
+
+        // Clean token: remove "Bearer ", whitespace, BOM, zero-width spaces
+        String token = jwt.replaceFirst("(?i)Bearer ", "") // case-insensitive remove "Bearer "
+                          .trim()
+                          .replace("\uFEFF", "")
+                          .replace("\u200B", "");
+
+        System.out.println("Token after cleaning: '" + token + "'");
+
+        // Extract user from JWT
+        User user;
+        try {
+            user = userService.getUserFromJwtToken(token);
+        } catch (Exception e) {
+            System.out.println("Failed to parse JWT: " + e.getMessage());
+            return ResponseEntity.status(401).build();
+        }
+
+        if (user == null) {
+            System.out.println("JWT token invalid or user not found for token: " + token);
+            return ResponseEntity.status(401).build();
+        }
+
+        return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
-    // FIX: clean token, remove hidden Unicode characters
-    String token = jwt.replace("Bearer", "")
-                      .replace("bearer", "")
-                      .trim()
-                      .replace("\uFEFF", "") // remove BOM
-                      .replace("\u200B", ""); // remove zero-width space
-
-    User user = userService.getUserFromJwtToken(token);
-
-    if (user == null) {
-        return ResponseEntity.status(401).build();
-    }
-
-    return ResponseEntity.ok(UserMapper.toDto(user));
-}
-
-
+    /**
+     * Get a user by ID
+     */
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(
-            @RequestHeader("Authorization") String jwt,
+            @RequestHeader(value = "Authorization", required = false) String jwt,
             @PathVariable Long id) throws Exception {
 
+        if (jwt == null || jwt.isBlank()) {
+            System.out.println("Authorization header is missing or blank");
+            return ResponseEntity.status(401).build();
+        }
+
+        // Optional: you could also verify JWT for /{id} access if needed
+        String token = jwt.replaceFirst("(?i)Bearer ", "").trim();
+
         User user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.ok(UserMapper.toDto(user));
     }
 }

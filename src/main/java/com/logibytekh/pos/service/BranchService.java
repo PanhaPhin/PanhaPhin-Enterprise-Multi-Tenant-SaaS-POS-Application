@@ -1,7 +1,6 @@
 package com.logibytekh.pos.service;
 
 import com.logibytekh.pos.exceptions.UserException;
-import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.BranchDTO;
 import java.util.List;
 
