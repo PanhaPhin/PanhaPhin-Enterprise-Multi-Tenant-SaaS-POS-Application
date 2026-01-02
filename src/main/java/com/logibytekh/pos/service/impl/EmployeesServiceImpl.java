@@ -70,7 +70,7 @@ public class EmployeesServiceImpl implements EmployeeService {
 
         );
 
-        if (employee.getRole() != UserRole.ROLE_BRAMCH_CASHIHER || employee.getRole() != UserRole.ROLE_STORE_MANAGER) {
+        if (employee.getRole() != UserRole.ROLE_BRANCH_CASHIHER || employee.getRole() != UserRole.ROLE_STORE_MANAGER) {
 
             User user = UserMapper.toEntity(employee);
             user.setBranch(branch);

@@ -19,6 +19,10 @@ import com.logibytekh.pos.payload.dto.OrderDTO;
 import com.logibytekh.pos.repository.ProductRespository;
 import com.logibytekh.pos.service.OrderService;
 import com.logibytekh.pos.service.UserService;
+
+import jakarta.transaction.Transactional;
+
+import com.logibytekh.pos.repository.OrderItemRepository;
 import com.logibytekh.pos.repository.OrderRespository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,14 +34,16 @@ public class OrderServiceImpl implements OrderService {
         private final UserService userService;
         private final ProductRespository productRespository;
         private final OrderRespository orderRespository;
+        private final OrderItemRepository orderItemRepository;
 
+        @Transactional
         @Override
         public OrderDTO createOrder(OrderDTO orderDTO) throws Exception {
                 User cashier = userService.getCurrentUser();
-
                 Branch branch = cashier.getBranch();
+
                 if (branch == null) {
-                        throw new Exception("Cashier is not assigned to any branch");
+                        throw new IllegalStateException("Cashier is not assigned to any branch");
                 }
 
                 Order order = Order.builder()
@@ -47,26 +53,30 @@ public class OrderServiceImpl implements OrderService {
                                 .paymentType(orderDTO.getPaymentType())
                                 .build();
 
-                List<OrderItem> orderItems = (List<OrderItem>) orderDTO.getItems().stream().map(itemDTO -> {
+                Order savedOrder = orderRespository.save(order);
+
+                List<OrderItem> orderItems = orderDTO.getItems().stream().map(itemDTO -> {
                         Product product = productRespository.findById(itemDTO.getProductId().getId())
-                                        .orElseThrow(() -> new RuntimeException("Product not found "));
+                                        .orElseThrow(() -> new RuntimeException("Product not found"));
 
                         return OrderItem.builder()
+                                        .order(savedOrder)
                                         .product(product)
                                         .quantity(itemDTO.getQuantity())
                                         .price(product.getSellingPrice() * itemDTO.getQuantity())
-                                        .order(order)
                                         .build();
                 }).toList();
-                double total = orderItems.stream().mapToDouble(
-                                OrderItem::getPrice).sum();
-                order.setTotalAmount(total);
-                order.setItems(orderItems);
 
-                Order savedOrder = orderRespository.save(order);
+                orderItemRepository.saveAll(orderItems);
+
+                double total = orderItems.stream()
+                                .mapToDouble(OrderItem::getPrice)
+                                .sum();
+
+                savedOrder.setTotalAmount(total);
+                savedOrder.setItems(orderItems);
 
                 return OrderMapper.toDTO(savedOrder);
-
         }
 
         @Override

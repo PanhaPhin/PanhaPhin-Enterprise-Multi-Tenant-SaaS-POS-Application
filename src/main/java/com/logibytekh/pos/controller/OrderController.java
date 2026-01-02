@@ -15,7 +15,6 @@ import com.logibytekh.pos.domain.OrderStatus;
 import com.logibytekh.pos.domain.PaymentType;
 import com.logibytekh.pos.payload.dto.OrderDTO;
 import com.logibytekh.pos.service.OrderService;
-import com.razorpay.Payment;
 
 import lombok.RequiredArgsConstructor;
 
