@@ -62,40 +62,46 @@ public class RefundServiceImpl implements RefundService {
     }
 
     @Override
-    public RefundDTO getRefundByCashier(Long cashierId) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRefundByCashier'");
+    public List<RefundDTO> getRefundByCashier(Long cashierId) throws Exception {
+       return refundRepository.findByCashierId(cashierId).stream()
+        .map(RefundMapper::toDTO)
+        .collect(Collectors.toList());
     }
 
     @Override
-    public RefundDTO getRefundByShiftReport(Long shiftReportId) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRefundByShiftReport'");
+    public List<RefundDTO> getRefundByShiftReport(Long shiftReportId) throws Exception {
+       return refundRepository.findByShiftReportId(shiftReportId).stream()
+        .map(RefundMapper::toDTO)
+        .collect(Collectors.toList());
     }
 
     @Override
     public List<RefundDTO> getRefundByCashierAndDateRange(Long cashierId, LocalDateTime startDate,
             LocalDateTime endDate) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRefundByCashierAndDateRange'");
+      return refundRepository.findByCashierIdAndCreatedAtBetween(cashierId, startDate, endDate).stream()
+        .map(RefundMapper::toDTO)
+        .collect(Collectors.toList());
+
     }
 
     @Override
     public List<RefundDTO> getRefundByBranch(Long branchId) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRefundByBranch'");
+       return refundRepository.findByBranchId(branchId).stream()
+        .map(RefundMapper::toDTO)
+        .collect(Collectors.toList());
     }
 
     @Override
     public RefundDTO getRefundById(Long refundId) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRefundById'");
+       
+        return refundRepository.findById(refundId)
+        .map(RefundMapper::toDTO).orElseThrow(() -> new Exception("Refund not found"));
     }
 
     @Override
     public void deleteRefund(Long refundId) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteRefund'");
+       this.getRefundById(refundId);
+       refundRepository.deleteById(refundId);
     }
     
 }

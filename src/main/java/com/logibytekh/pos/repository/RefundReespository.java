@@ -9,7 +9,7 @@ import com.logibytekh.pos.modal.Refund;
 
 public interface  RefundReespository extends JpaRepository<Refund, Long>{
 
-    List<Refund> findByCashierAndCreatedAtBetween(Long cashierId, LocalDateTime from, LocalDateTime to);
+    List<Refund> findByCashierIdAndCreatedAtBetween(Long cashier, LocalDateTime from, LocalDateTime to);
 
     List <Refund> findByCashierId(Long id);
     List<Refund> findByShiftReportId(Long cashierId);
