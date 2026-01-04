@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.logibytekh.pos.domain.OrderStatus;
 import com.logibytekh.pos.domain.PaymentType;
 import com.logibytekh.pos.payload.dto.OrderDTO;
+import com.logibytekh.pos.payload.dto.OrderReqDto;
 import com.logibytekh.pos.payload.dto.OrderRequestDTO;
 import com.logibytekh.pos.service.OrderService;
 
@@ -26,9 +27,15 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderRequestDTO orderRequest) throws Exception {
         return ResponseEntity.ok(orderService.createOrder(orderRequest));
+    }
+
+
+    @PostMapping("/post")
+    public ResponseEntity<String> post(@RequestBody OrderReqDto orderReqDto){
+        return ResponseEntity.ok("Ok");
     }
 
     @GetMapping("/{id}")
