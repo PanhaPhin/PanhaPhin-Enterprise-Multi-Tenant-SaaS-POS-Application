@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.logibytekh.pos.payload.dto.InventoryDTO;
 import com.logibytekh.pos.repository.InventoryRespository;
-import com.logibytekh.pos.repository.ProductRespository;
+import com.logibytekh.pos.repository.ProductRepository;
 import com.logibytekh.pos.service.InventoryService;
 
 import com.logibytekh.pos.modal.Product;
@@ -24,7 +24,7 @@ import com.logibytekh.pos.repository.BranchRespository;
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRespository inventoryRespository;
     private final BranchRespository branchRepository;
-    private final ProductRespository productRespository;
+    private final ProductRepository productRespository;
 
     @Override
     public InventoryDTO createInventory(InventoryDTO inventoryDTO) throws Exception {

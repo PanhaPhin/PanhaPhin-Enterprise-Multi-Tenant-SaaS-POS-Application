@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.logibytekh.pos.modal.Product;
 
-public interface ProductRespository extends JpaRepository<Product,Long>{
+public interface ProductRepository extends JpaRepository<Product,Long>{
 
     List<Product> findByStoreId(Long storeId);
 

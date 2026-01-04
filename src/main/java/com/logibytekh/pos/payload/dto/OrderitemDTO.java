@@ -1,13 +1,17 @@
 package com.logibytekh.pos.payload.dto;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
 @Builder
-public class OrderitemDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderItemDTO   {
 
     private Long id;
 
@@ -16,7 +20,7 @@ public class OrderitemDTO {
     private Double price;
 
     
-    private ProductDTO productId;
+    private Long productId;
 
     private Long orderId;
 

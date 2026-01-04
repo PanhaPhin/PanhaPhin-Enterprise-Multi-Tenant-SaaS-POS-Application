@@ -14,7 +14,7 @@ import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.ProductDTO;
 import com.logibytekh.pos.repository.CategoryRespository;
-import com.logibytekh.pos.repository.ProductRespository;
+import com.logibytekh.pos.repository.ProductRepository;
 import com.logibytekh.pos.repository.StoreRepository;
 import com.logibytekh.pos.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRespository productRespository;
+    private final ProductRepository productRespository;
     private final StoreRepository storeRepository;
     private final CategoryRespository categoryRespository;
 

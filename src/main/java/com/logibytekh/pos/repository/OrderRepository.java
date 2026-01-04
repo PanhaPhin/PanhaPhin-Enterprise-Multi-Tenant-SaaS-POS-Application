@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import com.logibytekh.pos.modal.Order;
 import com.logibytekh.pos.modal.User;
 
-public interface  OrderRespository extends JpaRepository<Order, Long> {
+public interface  OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByBranchId(Long customerId);
     List<Order> findByCustomerId(Long customerId);
     List<Order> findByCashierId(Long cashierId);

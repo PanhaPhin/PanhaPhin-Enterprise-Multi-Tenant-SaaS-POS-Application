@@ -7,31 +7,27 @@ import com.logibytekh.pos.domain.PaymentType;
 import com.logibytekh.pos.modal.Customer;
 import com.logibytekh.pos.modal.User;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderDTO {
     private Long id;
-
     private Double totalAmount;
-
     private LocalDateTime createdAt;
 
     private Long branchId;
+    private Long cashierId;
     private Long customerId;
 
-    private BranchDTO branch;
-
-    private User cashier;
-
-    private Customer customer;
-    
     private PaymentType paymentType;
 
-
-    private List<OrderitemDTO> items;
+    private List<OrderItemDTO> items;
 
     
 

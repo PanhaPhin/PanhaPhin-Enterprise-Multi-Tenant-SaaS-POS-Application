@@ -11,19 +11,21 @@ import com.logibytekh.pos.domain.OrderStatus;
 import com.logibytekh.pos.domain.PaymentType;
 import com.logibytekh.pos.mapper.OrderMapper;
 import com.logibytekh.pos.modal.Branch;
+import com.logibytekh.pos.modal.Customer;
 import com.logibytekh.pos.modal.Order;
 import com.logibytekh.pos.modal.OrderItem;
 import com.logibytekh.pos.modal.Product;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.OrderDTO;
-import com.logibytekh.pos.repository.ProductRespository;
+import com.logibytekh.pos.payload.dto.OrderRequestDTO;
+import com.logibytekh.pos.repository.ProductRepository;
 import com.logibytekh.pos.service.OrderService;
 import com.logibytekh.pos.service.UserService;
 
-import jakarta.transaction.Transactional;
 
+import com.logibytekh.pos.repository.CustomerRepository;
 import com.logibytekh.pos.repository.OrderItemRepository;
-import com.logibytekh.pos.repository.OrderRespository;
+import com.logibytekh.pos.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,56 +34,62 @@ import lombok.RequiredArgsConstructor;
 public class OrderServiceImpl implements OrderService {
 
         private final UserService userService;
-        private final ProductRespository productRespository;
-        private final OrderRespository orderRespository;
-        private final OrderItemRepository orderItemRepository;
+        private final ProductRepository productRepository;
+        private final OrderRepository orderRepository;
 
-        @Transactional
+        private final OrderItemRepository orderItemRepository;
+        private final CustomerRepository customerRepository;
+
         @Override
-        public OrderDTO createOrder(OrderDTO orderDTO) throws Exception {
+        public OrderDTO createOrder(OrderRequestDTO orderRequest) throws Exception {
+
                 User cashier = userService.getCurrentUser();
                 Branch branch = cashier.getBranch();
 
-                if (branch == null) {
-                        throw new IllegalStateException("Cashier is not assigned to any branch");
+                Customer customer = null;
+                if (orderRequest.getCustomerId() != null) {
+                        customer = customerRepository.findById(orderRequest.getCustomerId())
+                                        .orElseThrow(() -> new RuntimeException("Customer not found"));
                 }
 
                 Order order = Order.builder()
                                 .branch(branch)
                                 .cashier(cashier)
-                                .customer(orderDTO.getCustomer())
-                                .paymentType(orderDTO.getPaymentType())
+                                .customer(customer)
+                                .paymentType(orderRequest.getPaymentType())
                                 .build();
 
-                Order savedOrder = orderRespository.save(order);
+                Order savedOrder = orderRepository.save(order);
 
-                List<OrderItem> orderItems = orderDTO.getItems().stream().map(itemDTO -> {
-                        Product product = productRespository.findById(itemDTO.getProductId().getId())
+                List<OrderItem> items = orderRequest.getItems().stream().map(dto -> {
+
+                        if (dto.getProductId() == null) {
+                                throw new RuntimeException("Product ID must not be null");
+                        }
+
+                        Product product = productRepository.findById(dto.getProductId())
                                         .orElseThrow(() -> new RuntimeException("Product not found"));
 
                         return OrderItem.builder()
                                         .order(savedOrder)
                                         .product(product)
-                                        .quantity(itemDTO.getQuantity())
-                                        .price(product.getSellingPrice() * itemDTO.getQuantity())
+                                        .quantity(dto.getQuantity())
+                                        .price(product.getSellingPrice() * dto.getQuantity())
                                         .build();
                 }).toList();
 
-                orderItemRepository.saveAll(orderItems);
+                orderItemRepository.saveAll(items);
 
-                double total = orderItems.stream()
-                                .mapToDouble(OrderItem::getPrice)
-                                .sum();
-
+                double total = items.stream().mapToDouble(OrderItem::getPrice).sum();
                 savedOrder.setTotalAmount(total);
-                savedOrder.setItems(orderItems);
+                savedOrder.setItems(items);
 
                 return OrderMapper.toDTO(savedOrder);
         }
 
         @Override
         public OrderDTO getOrderById(Long id) throws Exception {
-                return orderRespository.findById(id)
+                return orderRepository.findById(id)
                                 .map(OrderMapper::toDTO)
                                 .orElseThrow(() -> new Exception("Order not found  "));
         }
@@ -90,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
         public List<OrderDTO> getOrdersByBranch(Long branchId, Long customerId, Long cashierId,
                         PaymentType paymentType, OrderStatus status) throws Exception {
 
-                return orderRespository.findByBranchId(branchId).stream()
+                return orderRepository.findByBranchId(branchId).stream()
                                 .filter(order -> customerId == null
                                                 || (order.getCustomer() != null
                                                                 && order.getCustomer().getId().equals(customerId)))
@@ -105,17 +113,17 @@ public class OrderServiceImpl implements OrderService {
 
         @Override
         public List<OrderDTO> getOrderByCashierId(Long cashierId) {
-                return orderRespository.findByCashierId(cashierId).stream()
+                return orderRepository.findByCashierId(cashierId).stream()
                                 .map(OrderMapper::toDTO)
                                 .collect(Collectors.toList());
         }
 
         @Override
         public void deleteOrder(Long id) throws Exception {
-                Order order = orderRespository.findById(id)
+                Order order = orderRepository.findById(id)
                                 .orElseThrow(() -> new Exception("Order not found "));
 
-                orderRespository.delete(order);
+                orderRepository.delete(order);
         }
 
         @Override
@@ -124,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
                 LocalDateTime start = today.atStartOfDay();
                 LocalDateTime end = today.plusDays(1).atStartOfDay();
 
-                return orderRespository.findByBranchIdAndCreatedAtBetween(branchId, start, end)
+                return orderRepository.findByBranchIdAndCreatedAtBetween(branchId, start, end)
                                 .stream()
                                 .map(OrderMapper::toDTO)
                                 .collect(Collectors.toList());
@@ -133,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
 
         @Override
         public List<OrderDTO> getOrdersByCustomerId(Long customerId) throws Exception {
-                return orderRespository.findByCustomerId(customerId).stream()
+                return orderRepository.findByCustomerId(customerId).stream()
                                 .map(OrderMapper::toDTO)
                                 .collect(Collectors.toList());
 
@@ -141,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
 
         @Override
         public List<OrderDTO> getTop5RecentOrdersByBranch(Long branchId) throws Exception {
-                return orderRespository.findTop5ByOrderByCreatedAtDesc(branchId).stream()
+                return orderRepository.findTop5ByOrderByCreatedAtDesc(branchId).stream()
                                 .map(OrderMapper::toDTO)
                                 .collect(Collectors.toList());
         }

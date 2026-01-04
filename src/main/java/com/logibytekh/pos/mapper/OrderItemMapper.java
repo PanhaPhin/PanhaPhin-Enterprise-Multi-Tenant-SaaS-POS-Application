@@ -1,20 +1,22 @@
 package com.logibytekh.pos.mapper;
 
 import com.logibytekh.pos.modal.OrderItem;
-import com.logibytekh.pos.payload.dto.OrderitemDTO;
+import com.logibytekh.pos.payload.dto.OrderItemDTO;
+
 
 public class OrderItemMapper {
 
-    public static OrderitemDTO toDTO(OrderItem item) {
+    public static OrderItemDTO   toDTO(OrderItem item) {
 
-        if (item == null) return null;
+        if (item == null)
+            return null;
 
-        return OrderitemDTO.builder()
+        return OrderItemDTO  .builder()
                 .id(item.getId())
+                .productId(item.getProduct().getId())
                 .quantity(item.getQuantity())
                 .price(item.getPrice())
-                .productId(ProductMapper.toDto(item.getProduct())) 
-                .orderId(item.getOrder() != null ? item.getOrder().getId() : null)
-                .build(); 
+                .orderId(item.getOrder().getId())
+                .build();
     }
 }

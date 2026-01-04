@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.logibytekh.pos.domain.OrderStatus;
 import com.logibytekh.pos.domain.PaymentType;
 import com.logibytekh.pos.payload.dto.OrderDTO;
+import com.logibytekh.pos.payload.dto.OrderRequestDTO;
 import com.logibytekh.pos.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
-
-
 
 @RestController
 @RequestMapping("/api/orders")
@@ -28,76 +27,62 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(
-        @RequestBody OrderDTO order) throws Exception {
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderRequestDTO orderRequest) throws Exception {
+        return ResponseEntity.ok(orderService.createOrder(orderRequest));
+    }
 
-        return ResponseEntity.ok(orderService.createOrder(order));
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDTO> getOrderById(
+            @PathVariable Long id) throws Exception {
 
-        }
+        return ResponseEntity.ok(orderService.getOrderById(id));
 
-        @GetMapping("/{id}")
-        public ResponseEntity<OrderDTO> getOrderById(
-            @PathVariable Long id
-        ) throws Exception {
+    }
 
-            return ResponseEntity.ok(orderService.getOrderById(id));
-
-        }
-
-        @GetMapping("/branch/{branchId}")
-        public ResponseEntity<List<OrderDTO>> getOrdersByBranch(
+    @GetMapping("/branch/{branchId}")
+    public ResponseEntity<List<OrderDTO>> getOrdersByBranch(
             @PathVariable Long branchId,
-            @RequestParam (required = false)  Long customerId,
-            @RequestParam (required = false)  Long cashierId,
-            @RequestParam (required = false)  PaymentType paymentType,
-            @RequestParam (required = false)  OrderStatus orderStatus
-            
-        ) throws Exception {
+            @RequestParam(required = false) Long customerId,
+            @RequestParam(required = false) Long cashierId,
+            @RequestParam(required = false) PaymentType paymentType,
+            @RequestParam(required = false) OrderStatus orderStatus
 
-            return ResponseEntity.ok(orderService.getOrdersByBranch(branchId,customerId,cashierId,paymentType,orderStatus));
-        }
+    ) throws Exception {
 
+        return ResponseEntity
+                .ok(orderService.getOrdersByBranch(branchId, customerId, cashierId, paymentType, orderStatus));
+    }
 
-        @GetMapping("/cashier/{id}")
-        public ResponseEntity<List<OrderDTO>> getOrderByCashier(
-            @PathVariable Long id
-        ) throws Exception {
+    @GetMapping("/cashier/{id}")
+    public ResponseEntity<List<OrderDTO>> getOrderByCashier(
+            @PathVariable Long id) throws Exception {
 
-            return ResponseEntity.ok(orderService.getOrderByCashierId(id));
+        return ResponseEntity.ok(orderService.getOrderByCashierId(id));
 
-        }
+    }
 
+    @GetMapping("/today/branch/{id}")
+    public ResponseEntity<List<OrderDTO>> getTodayOrder(
+            @PathVariable Long id) throws Exception {
 
-        @GetMapping("/today/branch/{id}")
-        public ResponseEntity<List<OrderDTO>> getTodayOrder(
-            @PathVariable Long id
-        ) throws Exception {
+        return ResponseEntity.ok(orderService.getTodayOrdersByBranch(id));
 
-            return ResponseEntity.ok(orderService.getTodayOrdersByBranch(id));
+    }
 
-        }
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<List<OrderDTO>> getCustomersOder(
+            @PathVariable Long id) throws Exception {
 
-        @GetMapping("/customer/{id}")
-        public ResponseEntity<List<OrderDTO>> getCustomersOder(
-            @PathVariable Long id
-        ) throws Exception {
+        return ResponseEntity.ok(orderService.getOrdersByCustomerId(id));
 
-            return ResponseEntity.ok(orderService.getOrdersByCustomerId(id));
+    }
 
-        }
+    @GetMapping("/recent/{branchId}")
+    public ResponseEntity<List<OrderDTO>> getRecentOrder(
+            @PathVariable Long branchId) throws Exception {
 
-        @GetMapping("/recent/{branchId}")
-        public ResponseEntity<List<OrderDTO>> getRecentOrder(
-            @PathVariable Long branchId
-        ) throws Exception {
+        return ResponseEntity.ok(orderService.getTop5RecentOrdersByBranch(branchId));
 
-            return ResponseEntity.ok(orderService.getTop5RecentOrdersByBranch(branchId));
+    }
 
-        }
-
-
-        
-    
-    
-    
 }

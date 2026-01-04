@@ -5,10 +5,11 @@ import java.util.List;
 import com.logibytekh.pos.domain.OrderStatus;
 import com.logibytekh.pos.domain.PaymentType;
 import com.logibytekh.pos.payload.dto.OrderDTO;
+import com.logibytekh.pos.payload.dto.OrderRequestDTO;
 
 public interface  OrderService {
 
-    OrderDTO createOrder(OrderDTO orderDTO) throws Exception;
+    OrderDTO createOrder(OrderRequestDTO orderRequest) throws Exception;
     OrderDTO getOrderById(Long id) throws Exception;
     List<OrderDTO> getOrdersByBranch(Long branchId , Long customerId, Long cashierId, PaymentType paymentType, OrderStatus status) throws Exception;
 
