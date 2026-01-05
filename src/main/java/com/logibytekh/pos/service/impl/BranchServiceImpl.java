@@ -11,7 +11,7 @@ import com.logibytekh.pos.modal.Branch;
 import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.BranchDTO;
-import com.logibytekh.pos.repository.BranchRespository;
+import com.logibytekh.pos.repository.BranchRepository;
 import com.logibytekh.pos.repository.StoreRepository;
 import com.logibytekh.pos.service.BranchService;
 
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BranchServiceImpl implements BranchService {
 
-    private final BranchRespository branchRepository;
+    private final BranchRepository branchRepository;
     private final StoreRepository storeRepository;
     private final UserServiceImpl userRepository;
 

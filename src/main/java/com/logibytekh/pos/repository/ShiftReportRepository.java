@@ -9,13 +9,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.logibytekh.pos.modal.ShiftReport;
 import com.logibytekh.pos.modal.User;
 
-public interface  ShiftReportRespository extends JpaRepository<ShiftReport, Long> {
+public interface  ShiftReportRepository extends JpaRepository<ShiftReport, Long> {
 
     List<ShiftReport> findByCashierId(Long id);
 
     List<ShiftReport> findByBranchId(Long id);
 
-    Optional<ShiftReport> findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(Long cashierId);
+    ShiftReport findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(User currentUser);
 
     Optional<ShiftReport> findByCashierAndShiftStartBetween(User cashier, LocalDateTime start, LocalDateTime end);
 

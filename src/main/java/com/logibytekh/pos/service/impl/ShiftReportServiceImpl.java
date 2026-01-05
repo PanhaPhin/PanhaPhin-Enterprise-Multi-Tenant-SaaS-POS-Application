@@ -8,12 +8,15 @@ import org.springframework.stereotype.Service;
 
 import com.logibytekh.pos.payload.dto.ShiftReportDTO;
 import com.logibytekh.pos.service.ShiftReportService;
-import com.logibytekh.pos.repository.ShiftReportRespository;
+import com.logibytekh.pos.repository.ShiftReportRepository;
 import com.logibytekh.pos.service.UserService;
 import com.logibytekh.pos.modal.ShiftReport;
 import com.logibytekh.pos.modal.User;
-import com.logibytekh.pos.repository.BranchRespository;
+import com.logibytekh.pos.repository.BranchRepository;
+import com.logibytekh.pos.repository.OrderRepository;
+import com.logibytekh.pos.repository.RefundRepository;
 import com.logibytekh.pos.modal.Branch;
+import com.logibytekh.pos.modal.Refund;
 import com.logibytekh.pos.mapper.ShiftReportMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -22,9 +25,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShiftReportServiceImpl implements ShiftReportService {
 
-    private final ShiftReportRespository shiftReportRespository;
+    private final ShiftReportRepository shiftReportRepository;
     private final UserService userService;
-    private final BranchRespository branchRespository;
+    private final BranchRepository branchRepository;
+    private final RefundRepository refundRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public ShiftReportDTO startShift(Long cashierId, Long branchId, LocalDateTime shiftStart) throws Exception {
@@ -35,39 +40,49 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
         LocalDateTime endOfDay = shiftStart.withHour(23).withMinute(59).withSecond(59);
 
-        Optional<ShiftReport> existing = shiftReportRespository.findByCashierAndShiftStartBetween(
-            currentUser, startOfDay, endOfDay
-            
-            );
+        Optional<ShiftReport> existing = shiftReportRepository.findByCashierAndShiftStartBetween(
+                currentUser, startOfDay, endOfDay
 
-            if(existing.isPresent()){
-                throw new Exception("Shift already started for today.");
-            }
+        );
 
-            Branch branch = currentUser.getBranch();
+        if (existing.isPresent()) {
+            throw new Exception("Shift already started for today.");
+        }
 
+        Branch branch = currentUser.getBranch();
 
-
-            ShiftReport shiftReport = ShiftReport.builder()
+        ShiftReport shiftReport = ShiftReport.builder()
                 .cashier(currentUser)
                 .shiftStart(shiftStart)
                 .branch(branch)
                 .build();
 
-            ShiftReport savedReport = shiftReportRespository.save(shiftReport);
-
-            
+        ShiftReport savedReport = shiftReportRepository.save(shiftReport);
 
         return ShiftReportMapper.toDTO(savedReport);
     }
+
     @Override
-    public ShiftReportDTO endShift(Long shiftReportId, 
-                                   LocalDateTime shiftEnd) throws Exception {
+    public ShiftReportDTO endShift(Long shiftReportId,
+            LocalDateTime shiftEnd) throws Exception {
 
         User currentUser = userService.getCurrentUser();
 
-        // ShiftReport shiftReport = shiftReportRespository.findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(CurrentUser)
-        //     .orElseThrow(() -> new Exception("Shift report not found."));
+        ShiftReport shiftReport = shiftReportRepository
+                .findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(currentUser);
+
+        if (shiftReport == null) {
+            throw new Exception("Shift not found");
+        }
+
+        shiftReport.setShiftEnd(shiftEnd);
+
+        List<Refund> refunds = refundRepository.findByCashierIdAndCreatedAtBetween(
+                currentUser.getId(),
+                shiftReport.getShiftStart(), shiftReport.getShiftEnd());
+
+        double totalRefunds = refunds.stream()
+                .mapToDouble(refund -> refund.getAmount() != null ? refund.getAmount() : 0.0).sum();
 
         return null;
     }

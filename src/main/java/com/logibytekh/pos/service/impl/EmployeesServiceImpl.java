@@ -11,7 +11,7 @@ import com.logibytekh.pos.modal.Branch;
 import com.logibytekh.pos.modal.Store;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.UserDto;
-import com.logibytekh.pos.repository.BranchRespository;
+import com.logibytekh.pos.repository.BranchRepository;
 import com.logibytekh.pos.repository.StoreRepository;
 import com.logibytekh.pos.repository.UserRepository;
 import com.logibytekh.pos.service.EmployeeService;
@@ -26,7 +26,7 @@ public class EmployeesServiceImpl implements EmployeeService {
 
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
-    private final BranchRespository branchRepository;
+    private final BranchRepository branchRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.logibytekh.pos.modal.Refund;
 
-public interface  RefundReespository extends JpaRepository<Refund, Long>{
+public interface  RefundRepository extends JpaRepository<Refund, Long>{
 
     List<Refund> findByCashierIdAndCreatedAtBetween(Long cashier, LocalDateTime from, LocalDateTime to);
 

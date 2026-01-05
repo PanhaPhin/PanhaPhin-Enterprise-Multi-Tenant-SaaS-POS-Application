@@ -17,13 +17,13 @@ import lombok.RequiredArgsConstructor;
 import com.logibytekh.pos.mapper.InventoryMapper;
 import com.logibytekh.pos.modal.Branch;
 import com.logibytekh.pos.modal.Inventory;
-import com.logibytekh.pos.repository.BranchRespository;
+import com.logibytekh.pos.repository.BranchRepository;
 
 @RequiredArgsConstructor
 @Service
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRespository inventoryRespository;
-    private final BranchRespository branchRepository;
+    private final BranchRepository branchRepository;
     private final ProductRepository productRespository;
 
     @Override

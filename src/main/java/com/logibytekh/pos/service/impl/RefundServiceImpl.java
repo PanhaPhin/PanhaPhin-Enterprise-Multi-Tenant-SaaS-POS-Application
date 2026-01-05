@@ -13,7 +13,7 @@ import com.logibytekh.pos.modal.Refund;
 import com.logibytekh.pos.modal.User;
 import com.logibytekh.pos.payload.dto.RefundDTO;
 import com.logibytekh.pos.repository.OrderRepository;
-import com.logibytekh.pos.repository.RefundReespository;
+import com.logibytekh.pos.repository.RefundRepository;
 import com.logibytekh.pos.service.RefundService;
 import com.logibytekh.pos.service.UserService;
 
@@ -25,7 +25,7 @@ public class RefundServiceImpl implements RefundService {
 
     private final UserService userService;
     private final OrderRepository orderRespository;
-    private final RefundReespository refundRepository;
+    private final RefundRepository refundRepository;
 
     @Override
     public RefundDTO createRefund(RefundDTO refund) throws Exception {
