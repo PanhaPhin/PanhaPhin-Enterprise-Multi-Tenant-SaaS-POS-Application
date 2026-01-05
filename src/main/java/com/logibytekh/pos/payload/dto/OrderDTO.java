@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.logibytekh.pos.domain.PaymentType;
-import com.logibytekh.pos.modal.Customer;
-import com.logibytekh.pos.modal.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
