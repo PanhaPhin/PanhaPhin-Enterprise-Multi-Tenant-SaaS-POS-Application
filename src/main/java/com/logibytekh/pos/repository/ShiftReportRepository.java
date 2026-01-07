@@ -15,7 +15,8 @@ public interface  ShiftReportRepository extends JpaRepository<ShiftReport, Long>
 
     List<ShiftReport> findByBranchId(Long id);
 
-    ShiftReport findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(User user);
+    Optional<ShiftReport> findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(User user);
+
 
     Optional<ShiftReport> findByCashierAndShiftStartBetween(
             User cashier,

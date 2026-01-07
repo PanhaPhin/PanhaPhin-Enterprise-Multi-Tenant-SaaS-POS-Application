@@ -79,11 +79,8 @@ public class ShiftReportServiceImpl implements ShiftReportService {
         User currentUser = userService.getCurrentUser();
 
         ShiftReport shiftReport = shiftReportRepository
-                .findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(currentUser);
-
-        if (shiftReport == null) {
-            throw new Exception("Shift not found");
-        }
+                .findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(currentUser)
+                .orElseThrow(() -> new Exception("Shift not found"));
 
         shiftReport.setShiftEnd(shiftEnd);
 
@@ -218,14 +215,43 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
         User user = userService.getCurrentUser();
 
-        // ShiftReport shift = shiftReportRepository
-        //         .findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(user)
-        //         .orElseThrow(() -> new Exception("No active shift found for the cashier."));
+        ShiftReport shiftReport = shiftReportRepository
+                .findTopByCashierAndShiftEndIsNullOrderByShiftStartDesc(user)
+                .orElseThrow(() -> new Exception("No active shift found for the cashier."));
 
-        // LocalDateTime now = LocalDateTime.now();
-        // List<Order> orders = orderRepository.findByCashierAndCreatedAtBetween(
-        //         user.getId(),
-        //         shift.getShiftStart(), now);
+        LocalDateTime now = LocalDateTime.now();
+
+        
+        List<Order> orders = orderRepository.findByCashierAndCreatedAtBetween(
+                user.getId(),
+                shiftReport.getShiftStart(), now);
+
+        List<Refund> refunds = refundRepository.findByCashierIdAndCreatedAtBetween(
+                user.getId(),
+                shiftReport.getShiftStart(), shiftReport.getShiftEnd());
+
+        double totalRefunds = refunds.stream()
+                .mapToDouble(refund -> refund.getAmount() != null ? refund.getAmount() : 0.0).sum();
+
+        
+
+        double totalSales = orders.stream()
+                .mapToDouble(Order::getTotalAmount).sum();
+
+        int totalOrders = orders.size();
+
+        double netSales = totalSales - totalRefunds;
+
+        shiftReport.setTotalRefunds(totalRefunds);
+        shiftReport.setTotalSales(totalSales);
+        shiftReport.setTotalOrders((double) totalOrders);
+        shiftReport.setNetSales(netSales);
+        shiftReport.setRecentOrders(getRecentOrders(orders));
+        shiftReport.setTopSellingProducts(getTopSellingProducts(orders));
+        shiftReport.setPaymentSummaries(getpaymentSummaries(orders, totalSales));
+        shiftReport.setRefunds(refunds);
+
+        ShiftReport savedReport = shiftReportRepository.save(shiftReport);
 
         return null;
     }
