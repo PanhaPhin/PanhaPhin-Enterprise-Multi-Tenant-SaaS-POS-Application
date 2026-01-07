@@ -1,5 +1,6 @@
 package com.logibytekh.pos.service.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,6 +16,7 @@ import com.logibytekh.pos.domain.PaymentType;
 import com.logibytekh.pos.payload.dto.ShiftReportDTO;
 import com.logibytekh.pos.service.ShiftReportService;
 import com.logibytekh.pos.repository.ShiftReportRepository;
+import com.logibytekh.pos.repository.UserRepository;
 import com.logibytekh.pos.service.UserService;
 import com.logibytekh.pos.modal.ShiftReport;
 import com.logibytekh.pos.modal.User;
@@ -40,12 +42,13 @@ public class ShiftReportServiceImpl implements ShiftReportService {
     private final BranchRepository branchRepository;
     private final RefundRepository refundRepository;
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public ShiftReportDTO startShift(Long cashierId, Long branchId, LocalDateTime shiftStart) throws Exception {
+    public ShiftReportDTO startShift() throws Exception {
 
         User currentUser = userService.getCurrentUser();
-        shiftStart = LocalDateTime.now();
+        LocalDateTime shiftStart = LocalDateTime.now();
         LocalDateTime startOfDay = shiftStart.withHour(0).withMinute(0).withSecond(0);
 
         LocalDateTime endOfDay = shiftStart.withHour(23).withMinute(59).withSecond(59);
@@ -92,7 +95,7 @@ public class ShiftReportServiceImpl implements ShiftReportService {
                 .mapToDouble(refund -> refund.getAmount() != null ? refund.getAmount() : 0.0).sum();
 
         List<Order> orders = orderRepository.findByCashierAndCreatedAtBetween(
-                currentUser.getId(),
+                currentUser,
                 shiftReport.getShiftStart(), shiftReport.getShiftEnd());
 
         double totalSales = orders.stream()
@@ -221,9 +224,8 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        
         List<Order> orders = orderRepository.findByCashierAndCreatedAtBetween(
-                user.getId(),
+                user,
                 shiftReport.getShiftStart(), now);
 
         List<Refund> refunds = refundRepository.findByCashierIdAndCreatedAtBetween(
@@ -232,8 +234,6 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
         double totalRefunds = refunds.stream()
                 .mapToDouble(refund -> refund.getAmount() != null ? refund.getAmount() : 0.0).sum();
-
-        
 
         double totalSales = orders.stream()
                 .mapToDouble(Order::getTotalAmount).sum();
@@ -253,13 +253,25 @@ public class ShiftReportServiceImpl implements ShiftReportService {
 
         ShiftReport savedReport = shiftReportRepository.save(shiftReport);
 
-        return null;
+        return ShiftReportMapper.toDTO(savedReport);
     }
 
     @Override
-    public ShiftReportDTO getShiftByCashierAndDate(Long cashierId, LocalDateTime date) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getShiftByCashierAndDate'");
+    public ShiftReportDTO getShiftByCashierAndDate(
+            Long cashierId,
+            LocalDate date) throws Exception {
+
+        User cashUser = userRepository.findById(cashierId)
+                .orElseThrow(() -> new Exception("Cashier not found with given id: " + cashierId));
+
+        LocalDateTime start = date.atStartOfDay();
+        LocalDateTime end = date.atTime(23, 59, 59);
+
+        ShiftReport report = shiftReportRepository
+                .findByCashierAndShiftStartBetween(cashUser, start, end)
+                .orElseThrow(() -> new Exception("Shift report not found for cashier on given date"));
+
+        return ShiftReportMapper.toDTO(report);
     }
 
 }

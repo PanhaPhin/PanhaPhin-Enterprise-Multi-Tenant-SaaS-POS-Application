@@ -1,6 +1,5 @@
 package com.logibytekh.pos.modal;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
@@ -41,13 +41,14 @@ public class ShiftReport {
     private Double netSales;
 
     private Double totalOrders;
-    
+
     @ManyToOne
+    @JoinColumn(name = "cashier_id", nullable = false)
     private User cashier;
 
     @ManyToOne
+    @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
-
 
     @Transient
     private List<PaymentSummary> paymentSummaries;
@@ -58,11 +59,7 @@ public class ShiftReport {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Order> recentOrders;
 
-
     @OneToMany(mappedBy = "shiftReport", cascade = CascadeType.ALL)
     private List<Refund> refunds;
-    
 
-    
-    
 }
