@@ -24,15 +24,20 @@ import lombok.RequiredArgsConstructor;
 public class RefundServiceImpl implements RefundService {
 
     private final UserService userService;
-    private final OrderRepository orderRespository;
+    private final OrderRepository orderRepository;
     private final RefundRepository refundRepository;
 
     @Override
     public RefundDTO createRefund(RefundDTO refund) throws Exception {
+        if (refund.getOrderId() == null) {
+            throw new IllegalArgumentException("Order ID must not be null");
+        }
+
         User cashier = userService.getCurrentUser();
 
-        Order order = orderRespository.findById(refund.getOrderId()).orElseThrow(
-                () -> new Exception("Order not found"));
+        Order order = orderRepository.findById(refund.getOrderId())
+                .orElseThrow(() -> new Exception("Order not found"));
+
         Branch branch = order.getBranch();
 
         Refund createdRefund = Refund.builder()
@@ -41,12 +46,10 @@ public class RefundServiceImpl implements RefundService {
                 .cashier(cashier)
                 .amount(refund.getAmount())
                 .reason(refund.getReason())
-                .createdAt(refund.getCreatedAt())
+                .paymentType(refund.getPaymentType())
                 .build();
 
-        Refund savedRefund = refundRepository.save(createdRefund);
-        return RefundMapper.toDTO(savedRefund);
-
+        return RefundMapper.toDTO(refundRepository.save(createdRefund));
     }
 
     @Override
@@ -76,7 +79,6 @@ public class RefundServiceImpl implements RefundService {
         return refundRepository.findByCashierIdAndCreatedAtBetween(cashierId, startDate, endDate).stream()
                 .map(RefundMapper::toDTO)
                 .collect(Collectors.toList());
-
     }
 
     @Override
@@ -88,15 +90,13 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     public RefundDTO getRefundById(Long refundId) throws Exception {
-
         return refundRepository.findById(refundId)
-                .map(RefundMapper::toDTO).orElseThrow(() -> new Exception("Refund not found"));
+                .map(RefundMapper::toDTO)
+                .orElseThrow(() -> new Exception("Refund not found"));
     }
 
     @Override
     public void deleteRefund(Long refundId) throws Exception {
-        this.getRefundById(refundId);
         refundRepository.deleteById(refundId);
     }
-
 }

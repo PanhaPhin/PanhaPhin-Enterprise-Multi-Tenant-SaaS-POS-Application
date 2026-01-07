@@ -15,15 +15,20 @@ public interface  RefundService {
 
 
     List <RefundDTO> getRefundByShiftReport(Long shiftReportId) throws Exception;
+
+
      List<RefundDTO> getRefundByCashierAndDateRange(
         Long cashierId,
         LocalDateTime startDate,
         LocalDateTime endDate
     ) throws Exception;
+
+
     List<RefundDTO> getRefundByBranch(Long branchId) throws Exception;
 
 
     RefundDTO getRefundById(Long refundId) throws Exception;
+    
     void deleteRefund(Long refundId) throws Exception;
 
     

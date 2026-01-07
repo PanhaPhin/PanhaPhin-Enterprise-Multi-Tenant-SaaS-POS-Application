@@ -18,11 +18,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 
-
-
-
-
-
 @Entity
 @Getter
 @Setter
@@ -32,7 +27,7 @@ import jakarta.persistence.PrePersist;
 public class Refund {
 
     @Id
-    @GeneratedValue(strategy =GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
@@ -53,14 +48,12 @@ public class Refund {
     private Branch branch;
 
     private PaymentType paymentType;
-    private LocalDateTime createdAt;
 
+    private LocalDateTime createdAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
-
-    
 }
