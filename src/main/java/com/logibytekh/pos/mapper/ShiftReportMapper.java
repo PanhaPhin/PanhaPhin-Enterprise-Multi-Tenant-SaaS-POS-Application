@@ -24,6 +24,7 @@ public class ShiftReportMapper {
                 .totalSales(entity.getTotalSales())
                 .totalRefunds(entity.getTotalRefunds())
                 .netSales(entity.getNetSales())
+                .totalRefunds(entity.getTotalRefunds())
                 .totalOrders(entity.getTotalOrders())
                 .cashierId(entity.getCashier() != null ? entity.getCashier().getId() : null)
                 .cashier(UserMapper.toDto(entity.getCashier()))
