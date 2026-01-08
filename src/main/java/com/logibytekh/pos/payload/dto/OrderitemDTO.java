@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItemDTO   {
+public class OrderItemDTO {
 
     private Long id;
 
@@ -17,12 +17,8 @@ public class OrderItemDTO   {
 
     private Double price;
 
-    
     private Long productId;
 
     private Long orderId;
 
-
 }
-
-
