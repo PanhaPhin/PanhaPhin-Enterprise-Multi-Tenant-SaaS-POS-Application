@@ -1,14 +1,13 @@
 import "./App.css";
-import { Button } from "./components/ui/button";
-import CreateOrder from "./pages/cashier/CreateOrder";
-import SalesSummaryCard from "./pages/cashier/Customer Management/CustomerList";
-import { ShiftSummaryPage } from "./pages/cashier/Shift Report/ShiftSummaryPage";
+import { ShiftSummaryPage } from "./pages/cashier/shift-report/ShiftSummaryPage";
 
 function App() {
   return (
-    <>
-      <ShiftSummaryPage/>
-    </>
+    <div className="min-h-screen bg-gray-50">
+      <ShiftSummaryPage />
+      
+      
+    </div>
   );
 }
 
