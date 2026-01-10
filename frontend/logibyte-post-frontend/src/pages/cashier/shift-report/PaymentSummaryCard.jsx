@@ -12,7 +12,7 @@ const shiftData = {
     {
       type: "CASH",
       totalAmount: 3499,
-      transactionCount: 6,
+      transactionCount: 8,
     },
   ],
 };
@@ -31,6 +31,23 @@ const PaymentSummaryCard = () => {
               items-center justify-center mr-4">
                 <CreditCard />
               </div>
+              <div className="flex-1">
+
+                <div className="flex justify-between">
+                  <span className="font-medium">{payment.type}</span>
+                  <span className="font-bold">{[payment.totalAmount]}</span>
+
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-sm text-muted-foreground">
+
+                  </div>
+                </div>
+
+              </div>
+
+              
             </div>
           ))}
         </div>
