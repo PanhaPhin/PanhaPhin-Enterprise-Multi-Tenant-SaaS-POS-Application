@@ -3,11 +3,12 @@ import OrderInformation from './OrderInformation'
 import CustomerInformation from './CustomerInformation'
 import OrderItemTable from './OrderItemTable'
 
-const OrderDetails = () => {
+
+const OrderDetails = ({selectedOrder}) => {
   return (
     <div>
         <div className='grid grid-cols-2 gap-4 mb-4'>
-            <OrderInformation/>
+            <OrderInformation selectedOrder={selectedOrder}/>
             <CustomerInformation/>
         </div>
         <OrderItemTable/>

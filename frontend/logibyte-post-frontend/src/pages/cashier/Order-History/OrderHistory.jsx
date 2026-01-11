@@ -14,11 +14,18 @@ import {
 
 const OrderHistory = () => {
   const [showOrderInvoiceDialog, setShowOrderInvoiceDialog] = useState(false);
+  
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const handleViewOrderDetails = (order)=>{
+    setSelectedOrder(order);
+    setShowOrderInvoiceDialog(true);
+  }
 
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 p-4 overflow-auto">
-        <OrderTable setShowOrderInvoiceDialog={setShowOrderInvoiceDialog} />
+        <OrderTable handleViewOrderDetails={handleViewOrderDetails} />
       </div>
 
       <Dialog
@@ -30,7 +37,7 @@ const OrderHistory = () => {
             <DialogTitle>Order – Invoice</DialogTitle>
           </DialogHeader>
 
-          <OrderDetails />
+          <OrderDetails selectedOrder={selectedOrder} />
 
           <DialogFooter>
             <Button>

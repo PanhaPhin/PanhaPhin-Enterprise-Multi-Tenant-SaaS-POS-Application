@@ -31,7 +31,7 @@ const rielFormatter = new Intl.NumberFormat("km-KH", {
   minimumFractionDigits: 0,
 });
 
-const OrderTable = ({ setShowOrderInvoiceDialog }) => {
+const OrderTable = ({ handleViewOrderDetails }) => {
   return (
     <div>
       <h2 className="text-xl font-semibold mb-4">Recent Orders</h2>
@@ -81,7 +81,7 @@ const OrderTable = ({ setShowOrderInvoiceDialog }) => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={setShowOrderInvoiceDialog}
+                    onClick={() => handleViewOrderDetails(order)}
                   >
                     <Eye className="h-4 w-4" />
                   </Button>
