@@ -21,12 +21,12 @@ const Refundpage = () => {
         {!selectedOrder ? (
           <OrderTable handleSelectOrder={handleSelectOrder} />
         ) : (
-          <>
+          <div className="flex-1 flex">
             <OrderDetailsSection
               selectedOrder={selectedOrder} handleSelectOrder={null}
             />
             <ReturnItemSection selectedOrder={selectedOrder} />
-          </>
+          </div>
         )}
       </div>
 
