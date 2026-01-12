@@ -17,10 +17,24 @@ const orders = [
     createdAt: "2025-01-11 13:45",
     customer: {
       fullName: "Walk-in Customer",
+      phone: "123456789",
     },
     totalAmount: 2999,
     paymentType: "CASH",
     status: "COMPLETED",
+    items:[
+      {
+        id:101,
+        product:{
+          image:"https://www.monde-selection.com/wp-content/uploads/2025/05/1044847-768x768.png",
+          name:"product 1",
+          sellingPrice:50000,
+          sku:"T Shirt"
+        },
+        quantity:2,
+      }
+    ]
+
   },
 ];
 
@@ -34,7 +48,7 @@ const rielFormatter = new Intl.NumberFormat("km-KH", {
 const OrderTable = ({ handleViewOrderDetails }) => {
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Recent Orders</h2>
+      <h2 className="text-2xl font-bold mb-4">Recent Orders</h2>
 
       <Table>
         <TableHeader>

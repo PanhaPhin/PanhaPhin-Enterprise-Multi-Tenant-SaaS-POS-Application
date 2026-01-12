@@ -9,9 +9,9 @@ const OrderDetails = ({selectedOrder}) => {
     <div>
         <div className='grid grid-cols-2 gap-4 mb-4'>
             <OrderInformation selectedOrder={selectedOrder}/>
-            <CustomerInformation/>
+            <CustomerInformation selectedOrder={selectedOrder}/>
         </div>
-        <OrderItemTable/>
+        <OrderItemTable selectedOrder={selectedOrder}/>
     </div>
   )
 }

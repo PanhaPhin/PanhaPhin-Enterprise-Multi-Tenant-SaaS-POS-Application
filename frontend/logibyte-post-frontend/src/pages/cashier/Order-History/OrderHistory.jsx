@@ -20,7 +20,8 @@ const OrderHistory = () => {
   const handleViewOrderDetails = (order)=>{
     setSelectedOrder(order);
     setShowOrderInvoiceDialog(true);
-  }
+  };
+  
 
   return (
     <div className="h-full flex flex-col">

@@ -23,7 +23,7 @@ const OrderInformation = ({ selectedOrder }) => {
 
           <div className="flex justify-between " >
             <span className="text-muted-foreground">Payment Method :</span>
-            <span>{selectedOrder.paymentMethod}</span>
+            <span>{selectedOrder.paymentType}</span>
           </div>
 
           <div className="flex justify-between " >
