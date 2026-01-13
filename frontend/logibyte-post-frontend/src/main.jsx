@@ -9,5 +9,5 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
     </BrowserRouter>
     <App />
-  </StrictMode>,
+  </StrictMode>
 )
