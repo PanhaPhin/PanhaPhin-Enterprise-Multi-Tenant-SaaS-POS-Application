@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import OrderTable from "./OrderTable";
 import OrderDetailsSection from "./OrderDetailsSection";
 import ReturnItemSection from "./ReturnItemSection";
-// import ReturnReciptDialog from "./ReturnReciptDialog";
+import ReturnReceiptDialog from "./ReturnReceiptDialog";
 
-const Refundpage = () => {
+const RefundPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const[showReturnReceiptDialog, setShowReturnReceiptDialog] = useState(false);
 
   const handleSelectOrder = (order) => {
     setSelectedOrder(order);
@@ -25,14 +26,18 @@ const Refundpage = () => {
             <OrderDetailsSection
               selectedOrder={selectedOrder} handleSelectOrder={null}
             />
-            <ReturnItemSection selectedOrder={selectedOrder} />
+            <ReturnItemSection selectedOrder={selectedOrder} showReturnReceiptDialog={setShowReturnReceiptDialog} />
           </div>
         )}
       </div>
 
-      {/* {selectedOrder && <ReturnReciptDialog />} */}
+      {selectedOrder && <ReturnReceiptDialog 
+      showReturnReceiptDialog={showReturnReceiptDialog} 
+      setShowReturnReceiptDialog={setShowReturnReceiptDialog} 
+      selectedOrder={selectedOrder}
+      />}
     </div>
   );
 };
 
-export default Refundpage;
+export default RefundPage;
