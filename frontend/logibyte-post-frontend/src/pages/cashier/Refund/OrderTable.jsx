@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-  TableHead,
-} from "../../../components/ui/table";
-import { Button } from "../../../components/ui/button";
+import { Table, TableBody, TableCell, TableHeader, TableRow, TableHead } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 const orders = [
   {
@@ -25,8 +18,7 @@ const orders = [
         id: 101,
         quantity: 2,
         product: {
-          image:
-            "https://www.monde-selection.com/wp-content/uploads/2025/05/1044847-768x768.png",
+          image: "https://www.monde-selection.com/wp-content/uploads/2025/05/1044847-768x768.png",
           name: "Product 1",
           sellingPrice: 50000,
           sku: "T Shirt",
@@ -44,7 +36,7 @@ const rielFormatter = new Intl.NumberFormat("km-KH", {
 
 const OrderTable = ({ handleSelectOrder }) => {
   return (
-    <div className="w-full">
+    <div className="w-full p-4">
       <Table>
         <TableHeader>
           <TableRow>
@@ -64,9 +56,7 @@ const OrderTable = ({ handleSelectOrder }) => {
               <TableCell className="font-medium">#{order.id}</TableCell>
               <TableCell>{order.createdAt}</TableCell>
               <TableCell>{order.customer?.fullName}</TableCell>
-              <TableCell>
-                {rielFormatter.format(order.totalAmount)}
-              </TableCell>
+              <TableCell>{rielFormatter.format(order.totalAmount)}</TableCell>
               <TableCell>{order.paymentType}</TableCell>
               <TableCell>
                 <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
@@ -74,11 +64,7 @@ const OrderTable = ({ handleSelectOrder }) => {
                 </span>
               </TableCell>
               <TableCell className="text-right">
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleSelectOrder(order)}
-                >
+                <Button variant="destructive" size="sm" onClick={() => handleSelectOrder(order)}>
                   Return / Refund
                 </Button>
               </TableCell>

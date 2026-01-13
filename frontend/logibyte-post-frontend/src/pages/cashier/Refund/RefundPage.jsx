@@ -6,7 +6,7 @@ import ReturnReceiptDialog from "./ReturnReceiptDialog";
 
 const RefundPage = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const[showReturnReceiptDialog, setShowReturnReceiptDialog] = useState(false);
+  const [showReturnReceiptDialog, setShowReturnReceiptDialog] = useState(false);
 
   const handleSelectOrder = (order) => {
     setSelectedOrder(order);
@@ -24,18 +24,24 @@ const RefundPage = () => {
         ) : (
           <div className="flex-1 flex">
             <OrderDetailsSection
-              selectedOrder={selectedOrder} handleSelectOrder={null}
+              selectedOrder={selectedOrder}
+              handleSelectOrder={handleSelectOrder}
             />
-            <ReturnItemSection selectedOrder={selectedOrder} showReturnReceiptDialog={setShowReturnReceiptDialog} />
+            <ReturnItemSection
+              selectedOrder={selectedOrder}
+              setShowReturnReceiptDialog={setShowReturnReceiptDialog}
+            />
           </div>
         )}
       </div>
 
-      {selectedOrder && <ReturnReceiptDialog 
-      showReturnReceiptDialog={showReturnReceiptDialog} 
-      setShowReturnReceiptDialog={setShowReturnReceiptDialog} 
-      selectedOrder={selectedOrder}
-      />}
+      {selectedOrder && (
+        <ReturnReceiptDialog
+          showReturnReceiptDialog={showReturnReceiptDialog}
+          setShowReturnReceiptDialog={setShowReturnReceiptDialog}
+          selectedOrder={selectedOrder}
+        />
+      )}
     </div>
   );
 };
