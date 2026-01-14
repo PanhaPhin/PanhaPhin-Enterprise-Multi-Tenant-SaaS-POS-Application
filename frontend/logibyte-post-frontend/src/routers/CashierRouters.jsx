@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 import CreateOrder from '@/pages/cashier/CreateOrder'
@@ -11,12 +10,8 @@ import CashierDashboardLayout from '@/pages/cashier/CashierDashboardLayout'
 const CashierRouters = () => {
   return (
     <Routes>
-     
-      <Route path="/" element={<CashierDashboardLayout />}>
-      
+      <Route element={<CashierDashboardLayout />}>
         <Route index element={<CreateOrder />} />
-
-       
         <Route path="orders" element={<OrderHistory />} />
         <Route path="customers" element={<CustomerLookup />} />
         <Route path="returns" element={<RefundPage />} />

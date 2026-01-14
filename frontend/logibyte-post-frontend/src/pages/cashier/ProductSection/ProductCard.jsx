@@ -4,45 +4,24 @@ import React from 'react'
 
 const ProductCard = () => {
   return (
-    <div className="group bg-white border rounded-xl overflow-hidden cursor-pointer transition hover:shadow-lg">
-      {/* Image */}
-      <div className="relative h-44 bg-muted">
-        <img
-          src="https://picsum.photos/300/300"
-          alt="Product"
-          className="h-full w-full object-cover group-hover:scale-105 transition"
-        />
+    <div className="border rounded-xl overflow-hidden hover:shadow cursor-pointer">
+      <img
+        src="https://picsum.photos/300"
+        className="h-40 w-full object-cover"
+      />
 
-        <Badge className="absolute top-2 left-2 bg-green-600">
-          In Stock
-        </Badge>
-      </div>
+      <div className="p-3">
+        <h4 className="text-sm font-medium">Product Name</h4>
+        <p className="text-xs text-muted-foreground">SKU12345</p>
 
-      {/* Content */}
-      <div className="p-4 space-y-1">
-        <h3 className="font-semibold text-sm line-clamp-2">
-          Men Slim Fit Checkered Shirt
-        </h3>
-
-        <p className="text-xs text-muted-foreground">
-          SKU: SHIRT-S-COTTON-BLACK-2025
-        </p>
-
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-lg font-bold text-green-600">
-            $899
-          </span>
-
-          <Button
-            size="sm"
-            className="opacity-0 group-hover:opacity-100 transition"
-          >
-            Add
-          </Button>
+        <div className="flex justify-between items-center mt-2">
+          <span className="text-green-600 font-bold">$899</span>
+          <span className="text-xs">men_shirt</span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductCard
+export default ProductCard;
+

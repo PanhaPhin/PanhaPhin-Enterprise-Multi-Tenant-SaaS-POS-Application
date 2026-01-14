@@ -1,4 +1,3 @@
 import { createContext } from "react";
 
-
-export const SidebarContext = createContext(undefined);
+export const SidebarContext = createContext(null);
