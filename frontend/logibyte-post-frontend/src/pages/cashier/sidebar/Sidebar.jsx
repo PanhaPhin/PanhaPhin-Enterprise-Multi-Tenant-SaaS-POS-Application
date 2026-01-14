@@ -1,5 +1,6 @@
-import { Button } from '@/components/ui/button'
-import React from 'react'
+import { Button } from '@/components/ui/button';
+import React from 'react';
+import {Cross} from "lucide-react";
 
 const Sidebar = ({navItems , onClose}) => {
   return (
