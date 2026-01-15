@@ -1,23 +1,20 @@
 import React from "react";
 import { Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
-const CartItem = () => {
+const CartItem = ({ item }) => {
+  const { name, qty, price } = item;
+
   return (
     <div className="group border rounded-xl p-4 flex justify-between gap-4 hover:shadow-md transition bg-white">
-
       {/* LEFT: Product Info */}
       <div className="flex flex-col gap-2">
         <h4 className="text-sm font-semibold leading-snug">
-          Men Slim Fit Checkered Spread Collar Casual Shirt
-          <span className="block text-xs font-normal text-muted-foreground">
-            (Pack of 2)
-          </span>
+          {name}
         </h4>
 
         <p className="text-xs text-muted-foreground">
-          SHRT-S-COTTON-BLACK-2025
+          {/* SKU or additional info */}
         </p>
 
         {/* Quantity */}
@@ -26,7 +23,7 @@ const CartItem = () => {
             −
           </Button>
           <span className="px-4 py-1 text-sm font-medium bg-muted/50">
-            2
+            {qty}
           </span>
           <Button variant="outline" size="sm" className="px-3 py-1 rounded-none hover:bg-muted">
             +
@@ -36,14 +33,13 @@ const CartItem = () => {
 
       {/* RIGHT: Price & Delete */}
       <div className="flex flex-col items-end justify-between">
-
         {/* Price */}
         <div className="text-right">
           <p className="text-xs text-muted-foreground">
-            ៛ 799 × 2
+            ៛ {price} × {qty}
           </p>
           <p className="text-green-700 font-bold text-lg">
-            ៛ 1,598
+            ៛ {(price * qty).toLocaleString()}
           </p>
         </div>
 

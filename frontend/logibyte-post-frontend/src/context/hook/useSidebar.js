@@ -8,5 +8,5 @@ export const useSidebar = () => {
     throw new Error("useSidebar must be used within a SidebarProvider");
   }
 
-  return context; // { sidebarOpen, setSidebarOpen }
+  return context;
 };
