@@ -5,26 +5,36 @@ import { SidebarProvider } from "../../context/SidebarProvider";
 import POSHeader from "./Header/POSHeader";
 import Sidebar from "./Sidebar/Sidebar";
 import { useSidebar } from "../../context/hook/useSidebar";
+import { FaCashRegister, FaClipboardList, FaUndo } from "react-icons/fa";
+import { ReceiptIcon } from "lucide-react";
+
 const navItems = [
-  {
+   {
     path: "/cashier",
-    icon: null,
+    icon: <FaCashRegister size={20} />,
     label: "POS Terminal",
   },
   {
     path: "/cashier/orders",
-    icon: null,
-    label: "POS Terminal",
+    icon: <FaClipboardList size={20} />,
+    label: "Orders",
   },
   {
     path: "/cashier/returns",
-    icon: null, // replace with <RotateCcw size={20}/>
+    icon: <FaUndo size={20} />,
     label: "Order History",
   },
-];
+  {
+    path: "/cashier/shift-summary",
+    icon: <ReceiptIcon size={20} />,
+    label: "Shift Summary",
+  },
+  
+
+]
 
 const LayoutContent = () => {
-  const { sidebarOpen, setSidebarOpen } = useSidebar(); // ✅ call the hook
+  const { sidebarOpen, setSidebarOpen } = useSidebar();
 
   return (
     <div className="flex h-screen bg-background">
