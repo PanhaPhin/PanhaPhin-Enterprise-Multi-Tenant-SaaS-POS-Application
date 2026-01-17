@@ -1,5 +1,6 @@
-const { createSlice } = require("@reduxjs/toolkit");
-const { getUserProfile } = require("./userThunk");
+import createSlice  from "@reduxjs/toolkit";
+import  getUserProfile, { getAllCashier, getAllCustomer, getUserById }  from "./userThunk";
+import login from "@/pages/Auth/Login";
 
 const initialState={
     userProfile: null,
@@ -10,7 +11,7 @@ const initialState={
     loading:false,
     error:null,
 
-}
+};
 
 const userSlice=createSlice({
     name:"user",
@@ -32,8 +33,39 @@ const userSlice=createSlice({
             state.loading=true;
             state.error=null;
             state.userProfile=null;
+            
+        })
+        .addCase(getUserProfile.fulfilled, (state,action)=> {
+            state.loading=false,
+            state.userProfile=action.payload;
+        })
+        
+        .addCase(getUserProfile.rejected,(state,action)=>{
+            state.loading=false,
+            state.error=action.payload
+        })
+
+        .addCase(getAllCustomer.fulfilled, (state, action) => {
+            state.loading=false,
+            state.error=action.payload
+        })
+
+        .addCase(getAllCashier.fulfilled, (state,action) => {
+            state.cashiers = action.payload;
+        })
+       
+
+        .addCase(getUserById.fulfilled, (state,action) => {
+            state.cashiers = action.payload;
+        })
+        .addCase(login.fulfilled,(state)=>{
+            state.userProfile = null;
+            state.selectedUser = null;
+            state.error = null;
         })
 
 
     }
 })
+
+export default userSlice.reducer;
