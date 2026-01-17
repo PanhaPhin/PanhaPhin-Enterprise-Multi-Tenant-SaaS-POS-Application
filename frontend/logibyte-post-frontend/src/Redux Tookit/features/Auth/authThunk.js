@@ -7,9 +7,12 @@ export const signup = createAsyncThunk("auth/signup" ,
         try{
             const res=await api.post("/auth/signup",userData)
             localStorage.setItem("jwt",res.data.data.jwt)
+            console.log("login success", res.data);
+            return res.data;
 
         } catch (error){
-            console.log("signup", error)
+            console.log("signup", error);
+            return rejectWithValue(error.response?.data?.message || "singup failed")
         }
 
     }
