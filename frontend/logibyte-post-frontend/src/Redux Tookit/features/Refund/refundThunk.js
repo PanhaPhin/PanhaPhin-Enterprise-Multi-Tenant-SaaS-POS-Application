@@ -61,22 +61,22 @@ export const getRefundsByCashier = createAsyncThunk(
   },
 );
 
-export const getRefundsByBranch = createAsyncThunk(
-  "/refund/getByBranch",
-  async (branchId, { rejectWithValue }) => {
+export const getRefundsById = createAsyncThunk(
+  "/refund/getById",
+  async (refundId, { rejectWithValue }) => {
     try {
       const headers = getAuthHeaders();
 
-      const res = await api.get(`/api/refunds/branch/${branchId}`, {
+      const res = await api.get(`/api/refunds/${refundId}`, {
         headers,
       });
 
-      console.log("get refund by branch success", res.data);
+      console.log("get refund by id success", res.data);
       return res.data;
     } catch (error) {
       console.log("error", error);
       return rejectWithValue(
-        error.response?.data?.message || "Failed to branch refund ",
+        error.response?.data?.message || "Failed to get refund by id ",
       );
     }
   },
