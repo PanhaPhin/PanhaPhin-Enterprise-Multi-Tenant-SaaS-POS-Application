@@ -62,3 +62,44 @@ export const deleteCustomer=createAsyncThunk("customer/delete",
         }
     }
 );
+
+
+export const getCustomerById=createAsyncThunk("customer/getById",
+    async(id, {rejectWithValue})=>{
+        try{
+            const headers= getAuthHeaders();
+            const res=await api.get(`/api/customers/${id}`,{
+            headers,
+            });
+            console.log("get customer by id success", res.data);
+            return res.data;
+        } catch (error){
+            console.log("error" , error?.response?.data);
+            return rejectWithValue(
+                error?.response?.data?.message || "Failed to fetch customer"
+            );
+
+        }
+    }
+);
+
+
+
+export const getAllCustomer=createAsyncThunk("customer/getALL",
+    async(_, {rejectWithValue})=>{
+        try{
+            const headers= getAuthHeaders();
+            const res=await api.get(`/api/customers/`,{
+            headers,
+            });
+            console.log("get All customer success", res.data);
+            return res.data;
+        } catch (error){
+            console.log("error" , error?.response?.data);
+            return rejectWithValue(
+                error?.response?.data?.message || "Failed to fetch customer"
+            );
+
+        }
+    }
+)
