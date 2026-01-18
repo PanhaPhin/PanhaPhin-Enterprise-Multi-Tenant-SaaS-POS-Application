@@ -17,3 +17,20 @@ export const signup = createAsyncThunk("auth/signup" ,
 
     }
 )
+
+
+export const login = createAsyncThunk(
+  "auth/login",
+  async (loginData, { rejectWithValue }) => {
+    try {
+      const res = await api.post("/auth/login", loginData);
+      if (res.data.data.jwt) {
+        localStorage.setItem("jwt", res.data.data.jwt);
+      }
+      return res.data;
+    } catch (error) {
+      console.error("Login Error:", error);
+      return rejectWithValue(error.response?.data?.message || "Login failed");
+    }
+  }
+);

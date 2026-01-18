@@ -18,18 +18,20 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Handle Signup
       .addCase(signup.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(signup.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload; // Adjust this if user data is nested deeper
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.payload;
       })
+      // Handle Login
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -40,7 +42,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.payload;
       });
   },
 });

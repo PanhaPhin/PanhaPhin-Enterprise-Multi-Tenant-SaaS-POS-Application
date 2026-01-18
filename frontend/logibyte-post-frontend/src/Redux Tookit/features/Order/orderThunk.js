@@ -43,7 +43,7 @@ export const getOrderById=createAsyncThunk("order/getById",
 );
 
 
-export const getOrderByBranch=createAsyncThunk("order/getByBranch",
+export const getOrdersByBranch=createAsyncThunk("order/getByBranch",
     async({branchId,customerId,cashierId,paymentType,status}, {rejectWithValue})=>{
         try{
             const headers= getAuthHeaders();
@@ -72,7 +72,7 @@ export const getOrderByBranch=createAsyncThunk("order/getByBranch",
 );
 
 
-export const getOrderByCashier=createAsyncThunk("order/getByCashier",
+export const getOrdersByCashier=createAsyncThunk("order/getByCashier",
     async(id, {rejectWithValue})=>{
         try{
             const headers= getAuthHeaders();
@@ -139,6 +139,26 @@ export const getOrderByCustomer=createAsyncThunk("order/getById",
             headers,
             });
             console.log("fetch customer order  success", res.data);
+            return res.data;
+        } catch (error){
+            console.log("error" , error?.response?.data);
+            return rejectWithValue(
+                error?.response?.data?.message || "Failed to fetch order "
+            );
+
+        }
+    }
+);
+
+
+export const getRecentOrdersByBranch=createAsyncThunk("order/getRecentByBranch",
+    async(id, {rejectWithValue})=>{
+        try{
+            const headers= getAuthHeaders();
+            const res=await api.post(`/api/orders/recent/${id}`,{
+            headers,
+            });
+            console.log("fetch recent branch order  success", res.data);
             return res.data;
         } catch (error){
             console.log("error" , error?.response?.data);
